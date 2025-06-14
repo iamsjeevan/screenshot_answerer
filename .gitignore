@@ -1,3 +1,10 @@
-venv
-apikey
+# Python
+venv/
 .env
+
+# macOS
+.DS_Store
+
+# Profile data
+chrome-profile/
+firefox-profile/
