@@ -1,0 +1,12 @@
+# Core Libraries
+pynput
+mss
+Pillow
+pytesseract
+
+# API Libraries
+google-generativeai
+twilio
+
+# Environment Variable Library
+python-dotenv
