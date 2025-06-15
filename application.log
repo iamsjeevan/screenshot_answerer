@@ -20,3 +20,109 @@ Traceback (most recent call last):
 TypeError: _on_press() missing 1 required positional argument: 'injected'
 2025-06-15 01:34:03,123 - INFO - script.py:307 - Stopping asyncio event loop...
 2025-06-15 01:34:03,126 - INFO - script.py:312 - Application exited.
+2025-06-15 13:12:08,649 - INFO - script.py:258 - Starting application initialization.
+2025-06-15 13:12:08,650 - INFO - script.py:268 - Asyncio event loop started in a separate thread.
+2025-06-15 13:12:08,811 - INFO - script.py:275 - Telegram Bot object initialized successfully.
+2025-06-15 13:12:08,811 - INFO - script.py:293 - Configured hotkeys for listener:
+2025-06-15 13:12:08,811 - INFO - script.py:295 -   - 'cmd shift 1' will trigger 'perform_ocr_task'
+2025-06-15 13:12:08,811 - INFO - script.py:295 -   - 'cmd shift 2' will trigger 'perform_selection_task'
+2025-06-15 13:12:08,968 - INFO - script.py:299 - AI Telegram Bot tool is running securely (using .env).
+2025-06-15 13:12:08,968 - INFO - script.py:300 - Listener is active and waiting for hotkey presses.
+2025-06-15 13:12:08,968 - INFO - script.py:301 - Remember to send a message to your bot on Telegram first to enable it to send messages to you!
+2025-06-15 13:12:34,343 - INFO - script.py:205 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 13:12:47,037 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-15 13:12:47,048 - INFO - script.py:170 - Telegram message part 1/1 sent successfully!
+2025-06-15 13:13:42,914 - ERROR - __init__.py:234 - Unhandled exception in listener callback
+Traceback (most recent call last):
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/__init__.py", line 230, in inner
+    return f(self, *args, **kwargs)
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/darwin.py", line 290, in _handler
+    self._handle_message(proxy, event_type, event, refcon, is_injected)
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/keyboard/_darwin.py", line 313, in _handle_message
+    self.on_press(self._SPECIAL_KEYS[key])
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/__init__.py", line 146, in inner
+    if f(*args) is False:
+TypeError: _on_press() missing 1 required positional argument: 'injected'
+2025-06-15 13:13:43,311 - INFO - script.py:307 - Stopping asyncio event loop...
+2025-06-15 13:13:43,318 - INFO - script.py:312 - Application exited.
+2025-06-15 13:14:23,036 - INFO - script.py:258 - Starting application initialization.
+2025-06-15 13:14:23,038 - INFO - script.py:268 - Asyncio event loop started in a separate thread.
+2025-06-15 13:14:23,243 - INFO - script.py:275 - Telegram Bot object initialized successfully.
+2025-06-15 13:14:23,244 - INFO - script.py:293 - Configured hotkeys for listener:
+2025-06-15 13:14:23,244 - INFO - script.py:295 -   - 'cmd shift 1' will trigger 'perform_ocr_task'
+2025-06-15 13:14:23,244 - INFO - script.py:295 -   - 'cmd shift 2' will trigger 'perform_selection_task'
+2025-06-15 13:14:23,519 - INFO - script.py:299 - AI Telegram Bot tool is running securely (using .env).
+2025-06-15 13:14:23,519 - INFO - script.py:300 - Listener is active and waiting for hotkey presses.
+2025-06-15 13:14:23,519 - INFO - script.py:301 - Remember to send a message to your bot on Telegram first to enable it to send messages to you!
+2025-06-15 13:14:35,468 - INFO - script.py:205 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 13:14:41,278 - INFO - script.py:229 - Hotkey cmd shift 2 pressed. Initiating selection task from clipboard...
+2025-06-15 13:14:42,194 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-15 13:14:42,198 - INFO - script.py:170 - Telegram message part 1/1 sent successfully!
+2025-06-15 13:14:52,990 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-15 13:14:53,021 - INFO - script.py:170 - Telegram message part 1/1 sent successfully!
+2025-06-15 13:18:18,202 - INFO - script.py:205 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 13:18:27,178 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-15 13:18:27,192 - INFO - script.py:170 - Telegram message part 1/1 sent successfully!
+2025-06-15 13:20:14,873 - INFO - script.py:205 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 13:21:51,428 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 400 Bad Request"
+2025-06-15 13:21:51,434 - ERROR - script.py:178 - Failed to send Telegram message part 1/2: Can't parse entities: character '(' is reserved and must be escaped with the preceding '\'
+2025-06-15 13:21:51,434 - ERROR - script.py:184 - Other Telegram API error for part 1/2: Can't parse entities: character '(' is reserved and must be escaped with the preceding '\'
+2025-06-15 13:21:51,597 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 400 Bad Request"
+2025-06-15 13:21:51,599 - ERROR - script.py:178 - Failed to send Telegram message part 2/2: Can't parse entities: can't find end of pre entity at byte offset 3710
+2025-06-15 13:21:51,599 - ERROR - script.py:184 - Other Telegram API error for part 2/2: Can't parse entities: can't find end of pre entity at byte offset 3710
+2025-06-15 13:47:53,820 - INFO - script.py:307 - Stopping asyncio event loop...
+2025-06-15 13:47:53,851 - INFO - script.py:312 - Application exited.
+2025-06-15 13:47:57,857 - INFO - script.py:250 - Starting application initialization.
+2025-06-15 13:47:57,857 - INFO - script.py:261 - Asyncio event loop started in a separate thread.
+2025-06-15 13:47:58,036 - INFO - script.py:268 - Telegram Bot object initialized successfully.
+2025-06-15 13:47:58,036 - INFO - script.py:285 - Configured hotkeys for listener:
+2025-06-15 13:47:58,036 - INFO - script.py:287 -   - 'cmd shift 1' will trigger 'perform_ocr_task'
+2025-06-15 13:47:58,036 - INFO - script.py:287 -   - 'cmd shift 2' will trigger 'perform_selection_task'
+2025-06-15 13:47:58,239 - INFO - script.py:291 - AI Telegram Bot tool is running securely (using .env).
+2025-06-15 13:47:58,239 - INFO - script.py:292 - Listener is active and waiting for hotkey presses.
+2025-06-15 13:48:07,485 - INFO - script.py:193 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 13:48:13,465 - INFO - script.py:158 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpshvassi9.py
+2025-06-15 13:48:14,772 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 13:48:14,800 - INFO - script.py:169 - Telegram document sent successfully!
+2025-06-15 13:49:05,827 - INFO - script.py:219 - Hotkey cmd shift 2 pressed. Initiating selection task from clipboard...
+2025-06-15 13:49:09,129 - INFO - script.py:158 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpamuf0que.py
+2025-06-15 13:49:10,619 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 13:49:10,624 - INFO - script.py:169 - Telegram document sent successfully!
+2025-06-15 13:53:30,696 - INFO - script.py:193 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 13:53:38,931 - INFO - script.py:158 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmptlnst6f6.py
+2025-06-15 13:53:40,159 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 13:53:40,174 - INFO - script.py:169 - Telegram document sent successfully!
+2025-06-15 13:55:54,884 - INFO - script.py:298 - Stopping asyncio event loop...
+2025-06-15 13:55:54,899 - INFO - script.py:303 - Application exited.
+2025-06-15 13:55:58,849 - INFO - script.py:252 - Starting application initialization.
+2025-06-15 13:55:58,850 - INFO - script.py:263 - Asyncio event loop started in a separate thread.
+2025-06-15 13:55:59,019 - INFO - script.py:270 - Telegram Bot object initialized successfully.
+2025-06-15 13:55:59,019 - INFO - script.py:287 - Configured hotkeys for listener:
+2025-06-15 13:55:59,019 - INFO - script.py:289 -   - 'cmd shift 1' will trigger 'perform_ocr_task'
+2025-06-15 13:55:59,019 - INFO - script.py:289 -   - 'cmd shift 2' will trigger 'perform_selection_task'
+2025-06-15 13:55:59,174 - INFO - script.py:293 - AI Telegram Bot tool is running securely (using .env).
+2025-06-15 13:55:59,174 - INFO - script.py:294 - Listener is active and waiting for hotkey presses.
+2025-06-15 13:56:11,255 - INFO - script.py:195 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 13:58:14,303 - INFO - script.py:160 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmps4imdi2x.py
+2025-06-15 13:58:15,739 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 13:58:15,755 - INFO - script.py:171 - Telegram document sent successfully!
+2025-06-15 13:59:59,672 - INFO - script.py:221 - Hotkey cmd shift 2 pressed. Initiating selection task from clipboard...
+2025-06-15 14:00:11,150 - INFO - script.py:160 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpkvjwfsm4.py
+2025-06-15 14:00:12,592 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 14:00:12,605 - INFO - script.py:171 - Telegram document sent successfully!
+2025-06-15 14:02:39,454 - INFO - script.py:221 - Hotkey cmd shift 2 pressed. Initiating selection task from clipboard...
+2025-06-15 14:02:51,485 - INFO - script.py:160 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmp5hek4ph0.py
+2025-06-15 14:02:52,645 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 14:02:52,663 - INFO - script.py:171 - Telegram document sent successfully!
+2025-06-15 14:03:08,318 - INFO - script.py:221 - Hotkey cmd shift 2 pressed. Initiating selection task from clipboard...
+2025-06-15 14:03:44,038 - INFO - script.py:160 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpwfhlrt8v.py
+2025-06-15 14:03:45,894 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 14:03:45,919 - INFO - script.py:171 - Telegram document sent successfully!
+2025-06-15 14:04:56,701 - INFO - script.py:195 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 14:06:57,350 - INFO - script.py:160 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmp8zjc4yft.py
+2025-06-15 14:06:58,983 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 14:06:59,159 - INFO - script.py:171 - Telegram document sent successfully!
+2025-06-15 14:09:29,748 - INFO - script.py:221 - Hotkey cmd shift 2 pressed. Initiating selection task from clipboard...
+2025-06-15 14:10:51,268 - INFO - script.py:160 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmp4hjb5314.py
+2025-06-15 14:10:52,632 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 14:10:52,663 - INFO - script.py:171 - Telegram document sent successfully!
