@@ -28,7 +28,7 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 # The script will ask you to choose one of these users on startup.
 USER_CHAT_IDS = {
     "1": {"name": "Jeevan", "id": "7107828513"},
-    "2": {"name": "Somnath", "id": "931229819"},
+    "2": {"name": "Somnath", "id": "1931229819"},
     "3": {"name": "Shahbhaaz", "id": "5963030030"}
 }
 # This global variable will be set when the script starts.
@@ -102,6 +102,8 @@ def get_ai_answer(input_text: str) -> str:
 
     # NEW: Enhanced prompt for high-quality Python solutions
     prompt = (
+        "check if the question is mcq or python question"
+        "if if it is mcqs just give the answer no explantion or else "
         "You are an expert Python programmer specializing in competitive programming and algorithm optimization. "
         "Based on the following problem description, provide a Python code solution. "
         "The code must be highly efficient, considering both time and space complexity. "

@@ -236,3 +236,83 @@ TypeError: _on_press() missing 1 required positional argument: 'injected'
 2025-06-15 17:18:09,747 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpoac8g0i5.txt
 2025-06-15 17:18:11,095 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
 2025-06-15 17:18:11,111 - INFO - script.py:176 - Telegram document sent successfully to Shahbhaaz (5963030030)!
+2025-06-15 17:18:43,486 - INFO - script.py:320 - Stopping asyncio event loop...
+2025-06-15 17:18:43,514 - INFO - script.py:325 - Application exited.
+2025-06-15 17:27:03,617 - INFO - script.py:257 - Starting application initialization.
+2025-06-15 17:27:05,520 - INFO - script.py:269 - Recipient for this session set to: Jeevan (ID: 7107828513)
+2025-06-15 17:27:05,527 - INFO - script.py:283 - Asyncio event loop started in a separate thread.
+2025-06-15 17:27:05,723 - INFO - script.py:290 - Telegram Bot object initialized successfully.
+2025-06-15 17:27:05,724 - INFO - script.py:307 - Configured hotkeys for listener:
+2025-06-15 17:27:05,724 - INFO - script.py:309 -   - 'cmd shift 1' will trigger 'perform_ocr_task'
+2025-06-15 17:27:05,724 - INFO - script.py:309 -   - 'cmd shift 2' will trigger 'perform_selection_task'
+2025-06-15 17:27:05,957 - INFO - script.py:313 - AI Telegram Bot tool is running securely for Jeevan.
+2025-06-15 17:27:05,957 - INFO - script.py:314 - Listener is active and waiting for hotkey presses.
+2025-06-15 17:27:11,560 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 17:27:22,030 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpooduyczh.txt
+2025-06-15 17:27:23,383 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 17:27:23,416 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 17:27:48,474 - INFO - script.py:226 - Hotkey cmd shift 2 pressed. Initiating selection task from clipboard...
+2025-06-15 17:27:54,627 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpt24t20ov.txt
+2025-06-15 17:27:55,988 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 17:27:55,994 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 17:34:28,923 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 17:34:46,904 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmp7iag9omm.txt
+2025-06-15 17:34:48,245 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 17:34:48,252 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 17:39:16,652 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 17:39:49,330 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpcfrqi1zn.txt
+2025-06-15 17:39:50,839 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 17:39:50,842 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 17:52:10,077 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 17:53:01,266 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpvqkg23i3.txt
+2025-06-15 17:53:02,633 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 17:53:02,637 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 18:00:23,537 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 18:00:31,150 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpyob_nnck.txt
+2025-06-15 18:00:32,500 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 18:00:32,503 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 18:06:25,517 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 18:06:36,730 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpledlcc89.txt
+2025-06-15 18:06:38,263 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 18:06:38,267 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 18:06:50,510 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 18:07:02,029 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpynxjgmbz.txt
+2025-06-15 18:07:03,293 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 18:07:03,295 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 18:07:23,656 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 18:07:47,079 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmp2z0v7axh.txt
+2025-06-15 18:07:48,337 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 18:07:48,339 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 18:08:02,837 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 18:08:15,707 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpgba9jkln.txt
+2025-06-15 18:08:17,032 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 18:08:17,034 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 18:09:32,671 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 18:09:43,102 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpmwuj_u4p.txt
+2025-06-15 18:09:44,276 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 18:09:44,277 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 18:09:58,221 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 18:10:08,953 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpfmpwo0xy.txt
+2025-06-15 18:10:10,231 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 18:10:10,234 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 18:11:28,033 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 18:11:46,805 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpxsbb4h3g.txt
+2025-06-15 18:11:47,902 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 18:11:47,903 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 18:15:28,103 - INFO - script.py:200 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-15 18:15:43,918 - INFO - script.py:165 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpk1zl2miy.txt
+2025-06-15 18:15:45,223 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-15 18:15:45,226 - INFO - script.py:176 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-15 19:13:09,255 - ERROR - __init__.py:234 - Unhandled exception in listener callback
+Traceback (most recent call last):
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/__init__.py", line 230, in inner
+    return f(self, *args, **kwargs)
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/darwin.py", line 290, in _handler
+    self._handle_message(proxy, event_type, event, refcon, is_injected)
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/keyboard/_darwin.py", line 313, in _handle_message
+    self.on_press(self._SPECIAL_KEYS[key])
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/__init__.py", line 146, in inner
+    if f(*args) is False:
+TypeError: _on_press() missing 1 required positional argument: 'injected'
+2025-06-15 19:13:09,413 - INFO - script.py:320 - Stopping asyncio event loop...
+2025-06-15 19:13:09,415 - INFO - script.py:325 - Application exited.
