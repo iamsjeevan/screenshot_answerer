@@ -1,0 +1,22 @@
+2025-06-15 01:31:50,300 - INFO - script.py:258 - Starting application initialization.
+2025-06-15 01:31:50,301 - INFO - script.py:268 - Asyncio event loop started in a separate thread.
+2025-06-15 01:31:50,474 - INFO - script.py:275 - Telegram Bot object initialized successfully.
+2025-06-15 01:31:50,474 - INFO - script.py:293 - Configured hotkeys for listener:
+2025-06-15 01:31:50,474 - INFO - script.py:295 -   - 'cmd shift 1' will trigger 'perform_ocr_task'
+2025-06-15 01:31:50,475 - INFO - script.py:295 -   - 'cmd shift 2' will trigger 'perform_selection_task'
+2025-06-15 01:31:50,688 - INFO - script.py:299 - AI Telegram Bot tool is running securely (using .env).
+2025-06-15 01:31:50,688 - INFO - script.py:300 - Listener is active and waiting for hotkey presses.
+2025-06-15 01:31:50,689 - INFO - script.py:301 - Remember to send a message to your bot on Telegram first to enable it to send messages to you!
+2025-06-15 01:34:03,017 - ERROR - __init__.py:234 - Unhandled exception in listener callback
+Traceback (most recent call last):
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/__init__.py", line 230, in inner
+    return f(self, *args, **kwargs)
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/darwin.py", line 290, in _handler
+    self._handle_message(proxy, event_type, event, refcon, is_injected)
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/keyboard/_darwin.py", line 313, in _handle_message
+    self.on_press(self._SPECIAL_KEYS[key])
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/__init__.py", line 146, in inner
+    if f(*args) is False:
+TypeError: _on_press() missing 1 required positional argument: 'injected'
+2025-06-15 01:34:03,123 - INFO - script.py:307 - Stopping asyncio event loop...
+2025-06-15 01:34:03,126 - INFO - script.py:312 - Application exited.

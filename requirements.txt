@@ -10,3 +10,6 @@ twilio
 
 # Environment Variable Library
 python-dotenv
+pyperclip
+# .env file
+
