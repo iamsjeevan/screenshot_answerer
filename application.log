@@ -316,3 +316,16 @@ Traceback (most recent call last):
 TypeError: _on_press() missing 1 required positional argument: 'injected'
 2025-06-15 19:13:09,413 - INFO - script.py:320 - Stopping asyncio event loop...
 2025-06-15 19:13:09,415 - INFO - script.py:325 - Application exited.
+2025-06-23 23:20:20,105 - INFO - script.py:259 - Starting application initialization.
+2025-06-23 23:20:24,523 - INFO - script.py:271 - Recipient for this session set to: Somnath (ID: 1931229819)
+2025-06-23 23:20:24,524 - INFO - script.py:285 - Asyncio event loop started in a separate thread.
+2025-06-23 23:20:24,786 - INFO - script.py:292 - Telegram Bot object initialized successfully.
+2025-06-23 23:20:24,787 - INFO - script.py:309 - Configured hotkeys for listener:
+2025-06-23 23:20:24,787 - INFO - script.py:311 -   - 'cmd shift 1' will trigger 'perform_ocr_task'
+2025-06-23 23:20:24,787 - INFO - script.py:311 -   - 'cmd shift 2' will trigger 'perform_selection_task'
+2025-06-23 23:20:24,917 - INFO - script.py:315 - AI Telegram Bot tool is running securely for Somnath.
+2025-06-23 23:20:24,917 - INFO - script.py:316 - Listener is active and waiting for hotkey presses.
+2025-06-23 23:20:45,621 - INFO - script.py:228 - Hotkey cmd shift 2 pressed. Initiating selection task from clipboard...
+2025-06-23 23:20:56,533 - INFO - script.py:167 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmp0lko96fu.txt
+2025-06-23 23:20:57,787 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-23 23:20:57,794 - INFO - script.py:178 - Telegram document sent successfully to Somnath (1931229819)!
