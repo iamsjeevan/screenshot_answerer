@@ -28,8 +28,9 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 # The script will ask you to choose one of these users on startup.
 USER_CHAT_IDS = {
     "1": {"name": "Jeevan", "id": "7107828513"},
-    "2": {"name": "Somnath", "id": "1931229819"},
-    "3": {"name": "Shahbhaaz", "id": "5963030030"}
+    "2": {"name": "Kushal", "id": "1931229819"},
+    "3": {"name": "Shahbhaaz", "id": "5963030030"},
+    "4":{"name": "Somnath" , "id" : "7774323731"}
 }
 # This global variable will be set when the script starts.
 SELECTED_CHAT_ID = None
@@ -45,7 +46,7 @@ OCR_HOTKEY = f'{MOD_KEY}+<shift>+1'
 SELECTION_HOTKEY = f'{MOD_KEY}+<shift>+2'
 
 AI_MODEL = "gemini-2.5-flash-preview-05-20"
-TIME_BETWEEN_MESSAGES_SEC = 1.5
+TIME_BETWEEN_MESSAGES_SEC = 1.5 # Not strictly used, but good to keep in mind for rate limits
 
 # --- Logging Setup ---
 LOG_FILE = 'application.log'
@@ -94,32 +95,40 @@ def escape_markdown_v2(text: str) -> str:
 
 def get_ai_answer(input_text: str) -> str:
     """
-    Sends input text to a Gemini AI model and returns the generated Python code.
+    Sends input text to a Gemini AI model and returns a structured response
+    indicating if it's an MCQ answer or code (Python/C++).
     """
     if not GEMINI_API_KEY:
         logger.error("GEMINI_API_KEY not found in .env file.")
         return "ERROR: GEMINI_API_KEY not found in .env file."
 
-    # NEW: Enhanced prompt for high-quality Python solutions
+    # Determine the target programming language based on the recipient
+    target_lang = "Python"
+    if SELECTED_USER_NAME == "Jeevan":
+        target_lang = "C++"
+
+    # Enhanced and structured prompt for the AI
     prompt = (
-        "check if the question is mcq or python question"
-        "if if it is mcqs just give the answer no explantion or else "
-        "You are an expert Python programmer specializing in competitive programming and algorithm optimization. "
-        "Based on the following problem description, provide a Python code solution. "
-        "The code must be highly efficient, considering both time and space complexity. "
-        "Aim for the most optimal algorithmic approach possible. "
-        "Provide ONLY the raw Python code. Do not include any explanations, comments, introductory sentences, "
-        "or markdown formatting like ```python.\n\n"
+        "Analyze the following problem description. Your response *must* start with either `TYPE:MCQ` or `TYPE:CODE`.\n"
+        "If it is a Multiple Choice Question (MCQ):\n"
+        "- Respond in the format: `TYPE:MCQ\\nANSWER:<Option Letter>` (e.g., `TYPE:MCQ\\nANSWER:A`). "
+        "Do NOT include explanations, numbering, or any additional text beyond the specified format.\n"
+        "If it is a programming problem:\n"
+        f"- Respond in the format: `TYPE:CODE\\nLANGUAGE:{target_lang}\\nCODE:<code>`. "
+        f"The `<code>` part must contain ONLY the raw {target_lang} code solution. "
+        "Do NOT include any explanations, comments, introductory sentences, or markdown formatting like ```python or ```cpp.\n"
         f"Problem:\n---\n{input_text}\n---"
     )
+
     try:
         genai.configure(api_key=GEMINI_API_KEY)
         model = genai.GenerativeModel(AI_MODEL)
         response = model.generate_content(prompt)
+        # Ensure the response is stripped of leading/trailing whitespace
         return response.text.strip()
     except Exception as e:
         logger.exception(f"Error from AI model during content generation for text: {input_text[:50]}...")
-        return f"Error from AI: {e}"
+        return f"ERROR: AI generation failed: {e}"
 
 # --- UPDATED TELEGRAM FUNCTIONS ---
 
@@ -143,9 +152,9 @@ async def send_telegram_message_async(message_text: str):
     except Exception as e:
         logger.exception(f"Failed to send simple Telegram message: {e}")
 
-async def send_code_as_file_async(code_text: str, caption: str):
+async def send_code_as_file_async(code_text: str, caption: str): # Removed file_extension parameter
     """
-    ASYNC function to send code as a .py file via Telegram
+    ASYNC function to send code as a .txt file via Telegram
     to the globally selected user.
     """
     if not telegram_bot or not SELECTED_CHAT_ID:
@@ -158,20 +167,21 @@ async def send_code_as_file_async(code_text: str, caption: str):
         return
 
     escaped_caption = escape_markdown_v2(caption)
+    temp_file_path = None # Initialize outside try-block for finally
     try:
-        # Use a temporary file to hold the code
+        # Use a temporary file to hold the code, always with .txt suffix
         with tempfile.NamedTemporaryFile(mode='w+', delete=False, suffix='.txt', encoding='utf-8') as temp_file:
             temp_file.write(code_text)
             temp_file_path = temp_file.name
 
         logger.info(f"Sending code as a file: {temp_file_path}")
 
-        # Send the file
+        # Send the file, always named solution.txt
         with open(temp_file_path, 'rb') as file_to_send:
             await telegram_bot.send_document(
                 chat_id=int(SELECTED_CHAT_ID),
                 document=file_to_send,
-                filename="solution.txt", # UPDATED: Filename is now .py
+                filename="solution.txt", # Always send as .txt
                 caption=escaped_caption,
                 parse_mode=telegram.constants.ParseMode.MARKDOWN_V2
             )
@@ -182,7 +192,7 @@ async def send_code_as_file_async(code_text: str, caption: str):
         await send_telegram_message_async(f"An internal error occurred while trying to send the code file: {e}")
     finally:
         # Clean up the temporary file
-        if 'temp_file_path' in locals() and os.path.exists(temp_file_path):
+        if temp_file_path and os.path.exists(temp_file_path):
             os.remove(temp_file_path)
 
 def run_async_task(coro):
@@ -191,13 +201,72 @@ def run_async_task(coro):
         return asyncio.run_coroutine_threadsafe(coro, loop)
     else:
         logger.critical("Asyncio event loop is not running. Cannot submit task.")
-        return Future()
+        # Return a Future that's immediately done, possibly with an exception
+        f = Future()
+        f.set_exception(RuntimeError("Asyncio event loop not running"))
+        return f
 
 # --- UPDATED TASK FUNCTIONS ---
 
+def process_ai_response(ai_raw_response: str):
+    """
+    Parses the structured AI response and dispatches the appropriate Telegram action.
+    """
+    if ai_raw_response.startswith("ERROR:"):
+        run_async_task(send_telegram_message_async(ai_raw_response))
+        return
+
+    if ai_raw_response.startswith("TYPE:MCQ"):
+        try:
+            mcq_answer = ai_raw_response.split("ANSWER:", 1)[1].strip()
+            if mcq_answer:
+                logger.info(f"Detected MCQ. Sending answer: {mcq_answer}")
+                run_async_task(send_telegram_message_async(f"MCQ Answer: {mcq_answer}"))
+            else:
+                logger.warning("AI returned MCQ type but no answer option found.")
+                run_async_task(send_telegram_message_async("AI detected an MCQ but could not extract the answer. Please try again."))
+        except IndexError:
+            logger.error(f"Malformed MCQ response from AI: {ai_raw_response}")
+            run_async_task(send_telegram_message_async("AI returned a malformed MCQ answer. Please review the input."))
+    elif ai_raw_response.startswith("TYPE:CODE"):
+        try:
+            parts = ai_raw_response.split('\n')
+            
+            # Find LANGUAGE and CODE lines
+            language = None
+            code_start_index = -1
+            for i, part in enumerate(parts):
+                if part.startswith("LANGUAGE:"):
+                    language = part.split("LANGUAGE:", 1)[1].strip()
+                elif part.startswith("CODE:"):
+                    code_start_index = i
+            
+            if language is None or code_start_index == -1:
+                raise ValueError("Missing LANGUAGE or CODE section in AI response.")
+
+            # The actual code starts on the line *after* "CODE:"
+            code_text = "\n".join(parts[code_start_index + 1:]).strip()
+
+            if not code_text:
+                logger.info(f"AI returned no {language} code.")
+                run_async_task(send_telegram_message_async(f"The AI did not generate any {language} code for the given input."))
+                return
+
+            caption = f"{language} code generated from input (as .txt):" # Updated caption for clarity
+            logger.info(f"Detected programming problem ({language}). Sending code as .txt file.")
+            run_async_task(send_code_as_file_async(code_text, caption)) # Removed file_extension argument
+
+        except (IndexError, ValueError) as e:
+            logger.error(f"Malformed CODE response from AI: {ai_raw_response}. Error: {e}")
+            run_async_task(send_telegram_message_async("AI returned a malformed code answer. Please review the input."))
+    else:
+        logger.error(f"Unexpected AI response format: {ai_raw_response}")
+        run_async_task(send_telegram_message_async("AI returned an unexpected response format. Could not process the request."))
+
+
 def perform_ocr_task():
     """
-    Captures a screenshot, performs OCR, gets a Python answer, and sends it as a .py file.
+    Captures a screenshot, performs OCR, gets a structured AI answer, and dispatches it.
     """
     logger.info("Hotkey %s pressed. Initiating OCR task from screenshot...", format_hotkey_for_display(OCR_HOTKEY))
     try:
@@ -212,10 +281,8 @@ def perform_ocr_task():
             run_async_task(send_telegram_message_async("No text was recognized from the screenshot."))
             return
 
-        ai_answer = get_ai_answer(ocr_text)
-        # UPDATED: Caption now says "Python"
-        caption = "Python code generated from screenshot OCR:"
-        run_async_task(send_code_as_file_async(ai_answer, caption))
+        ai_raw_response = get_ai_answer(ocr_text)
+        process_ai_response(ai_raw_response)
 
     except Exception as e:
         logger.exception("An error occurred in perform_ocr_task.")
@@ -223,7 +290,7 @@ def perform_ocr_task():
 
 def perform_selection_task():
     """
-    Reads text from clipboard, gets a Python answer, and sends it as a .py file.
+    Reads text from clipboard, gets a structured AI answer, and dispatches it.
     """
     logger.info("Hotkey %s pressed. Initiating selection task from clipboard...", format_hotkey_for_display(SELECTION_HOTKEY))
     try:
@@ -233,10 +300,8 @@ def perform_selection_task():
             run_async_task(send_telegram_message_async("Clipboard is empty. Please copy some text first."))
             return
 
-        ai_answer = get_ai_answer(selected_text)
-        # UPDATED: Caption now says "Python"
-        caption = "Python code generated from clipboard text:"
-        run_async_task(send_code_as_file_async(ai_answer, caption))
+        ai_raw_response = get_ai_answer(selected_text)
+        process_ai_response(ai_raw_response)
 
     except pyperclip.PyperclipException as e:
         logger.exception(f"Failed to access clipboard: {e}.")
@@ -258,7 +323,7 @@ def main():
 
     logger.info("Starting application initialization.")
 
-    # --- NEW: User selection menu at startup ---
+    # --- User selection menu at startup ---
     while True:
         print("\n--- Who is the recipient for this session? ---")
         for key, user_info in USER_CHAT_IDS.items():
@@ -321,6 +386,7 @@ def main():
         if loop and loop.is_running():
             logger.info("Stopping asyncio event loop...")
             loop.call_soon_threadsafe(loop.stop)
+            # Give the thread a moment to finish, but don't block indefinitely
             loop_thread.join(timeout=5)
             if loop_thread.is_alive():
                 logger.warning("Asyncio loop thread did not stop gracefully.")
