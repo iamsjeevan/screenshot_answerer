@@ -8,7 +8,7 @@ import time
 import os
 import json
 import google.generativeai as genai
-import pyperclip
+from google.generativeai import types
 from dotenv import load_dotenv
 import telegram
 import asyncio
@@ -16,6 +16,8 @@ from concurrent.futures import Future
 import logging
 from logging.handlers import RotatingFileHandler
 import tempfile
+import random
+import string
 
 # --- Load the environment variables from the .env file ---
 load_dotenv()
@@ -42,11 +44,14 @@ if sys.platform == "win32":
 
 # Hotkey configuration
 MOD_KEY = "<cmd>" if sys.platform == "darwin" else "<ctrl>"
-OCR_HOTKEY = f'{MOD_KEY}+<shift>+1'
-SELECTION_HOTKEY = f'{MOD_KEY}+<shift>+2'
+OCR_CODE_HOTKEY = f'{MOD_KEY}+<shift>+1' # For Code Generation (Python only)
+OCR_MCQ_HOTKEY = f'{MOD_KEY}+<shift>+2' # For MCQ Answer Only
+OCR_PYTHON_CODE_HOTKEY = f'{MOD_KEY}+<shift>+3' # For Python Code Generation (always Python, but enforced)
 
-AI_MODEL = "gemini-2.5-flash-preview-05-20"
-TIME_BETWEEN_MESSAGES_SEC = 1.5 # Not strictly used, but good to keep in mind for rate limits
+
+AI_MODEL = "gemini-2.5-flash" # or "gemini-2.0-flash" for Python Code Generation
+MCQ_AI_MODEL = "gemini-2.0-flash"
+TIME_BETWEEN_MESSAGES_SEC = 0.1 # Not strictly used, but good to keep in mind for rate limits
 
 # --- Logging Setup ---
 LOG_FILE = 'application.log'
@@ -93,44 +98,59 @@ def escape_markdown_v2(text: str) -> str:
         text = text.replace(char, f'\\{char}')
     return text
 
-def get_ai_answer(input_text: str) -> str:
+def get_ai_answer(input_text: str, is_mcq: bool = False, force_language: str = "Python") -> str:
     """
     Sends input text to a Gemini AI model and returns a structured response
-    indicating if it's an MCQ answer or code (Python/C++).
+    indicating if it's an MCQ answer with explanation or raw code.
+    Now *always* generates Python code.
     """
     if not GEMINI_API_KEY:
         logger.error("GEMINI_API_KEY not found in .env file.")
         return "ERROR: GEMINI_API_KEY not found in .env file."
 
-    # Determine the target programming language based on the recipient
-    target_lang = "Python"
-    if SELECTED_USER_NAME == "Jeevan":
-        target_lang = "C++"
+    if is_mcq:
+        # *** Optimized prompt for fast MCQ answers ***
+        prompt = (
+            f"You are a highly efficient MCQ solver. Given a multiple-choice question, "
+            f"respond *ONLY* with the single best answer and a very concise explanation.\n"
+            f"Your response *MUST* be in the following format:\n"
+            f"TYPE:MCQ\n"
+            f"ANSWER:<Option Letter>\n"
+            f"EXPLANATION:<Brief explanation of why this answer is correct. Keep this extremely short.>\n"
+            f"\n"
+            f"Question:\n---\n{input_text}\n---"
+        )
+        model_to_use = MCQ_AI_MODEL # gemini-2.0-flash
+        logger.info(f"Using MCQ_AI_MODEL: {model_to_use}")
 
-    # Enhanced and structured prompt for the AI
-    prompt = (
-        "Analyze the following problem description. Your response *must* start with either `TYPE:MCQ` or `TYPE:CODE`.\n"
-        "If it is a Multiple Choice Question (MCQ):\n"
-        "- Respond in the format: `TYPE:MCQ\\nANSWER:<Option Letter>` (e.g., `TYPE:MCQ\\nANSWER:A`). "
-        "Do NOT include explanations, numbering, or any additional text beyond the specified format.\n"
-        "If it is a programming problem:\n"
-        f"- Respond in the format: `TYPE:CODE\\nLANGUAGE:{target_lang}\\nCODE:<code>`. "
-        f"The `<code>` part must contain ONLY the raw {target_lang} code solution. "
-        "Do NOT include any explanations, comments, introductory sentences, or markdown formatting like ```python or ```cpp.\n"
-        f"Problem:\n---\n{input_text}\n---"
-    )
+    else:
+        # Enforce Python-only code generation (removed variable constraints).
+        prompt = (
+            f"You are an expert Python programmer. You must generate Python code to solve the following problem. "
+            f"Your response *MUST* be a single, complete Python code block. "
+            f"Do NOT include any text, explanation, or comments outside of the code block.\n"
+            f"The solution must be in this format:\n"
+            f"TYPE:CODE\n"
+            f"LANGUAGE:Python\n"
+            f"CODE:<code>\n"
+            f"The `<code>` part must contain ONLY the raw code solution.\n"
+            f"\n"
+            f"Problem:\n---\n{input_text}\n---"
+        )
+        model_to_use = AI_MODEL # gemini-2.5-flash
+        logger.info(f"Using AI_MODEL: {model_to_use}")
 
     try:
         genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel(AI_MODEL)
+        model = genai.GenerativeModel(model_to_use)
         response = model.generate_content(prompt)
-        # Ensure the response is stripped of leading/trailing whitespace
+
         return response.text.strip()
     except Exception as e:
         logger.exception(f"Error from AI model during content generation for text: {input_text[:50]}...")
         return f"ERROR: AI generation failed: {e}"
 
-# --- UPDATED TELEGRAM FUNCTIONS ---
+# --- TELEGRAM ASYNC FUNCTIONS ---
 
 async def send_telegram_message_async(message_text: str):
     """
@@ -152,7 +172,7 @@ async def send_telegram_message_async(message_text: str):
     except Exception as e:
         logger.exception(f"Failed to send simple Telegram message: {e}")
 
-async def send_code_as_file_async(code_text: str, caption: str): # Removed file_extension parameter
+async def send_code_as_file_async(code_text: str, caption: str):
     """
     ASYNC function to send code as a .txt file via Telegram
     to the globally selected user.
@@ -167,21 +187,19 @@ async def send_code_as_file_async(code_text: str, caption: str): # Removed file_
         return
 
     escaped_caption = escape_markdown_v2(caption)
-    temp_file_path = None # Initialize outside try-block for finally
+    temp_file_path = None
     try:
-        # Use a temporary file to hold the code, always with .txt suffix
         with tempfile.NamedTemporaryFile(mode='w+', delete=False, suffix='.txt', encoding='utf-8') as temp_file:
             temp_file.write(code_text)
             temp_file_path = temp_file.name
 
         logger.info(f"Sending code as a file: {temp_file_path}")
 
-        # Send the file, always named solution.txt
         with open(temp_file_path, 'rb') as file_to_send:
             await telegram_bot.send_document(
                 chat_id=int(SELECTED_CHAT_ID),
                 document=file_to_send,
-                filename="solution.txt", # Always send as .txt
+                filename="solution.txt",
                 caption=escaped_caption,
                 parse_mode=telegram.constants.ParseMode.MARKDOWN_V2
             )
@@ -191,7 +209,6 @@ async def send_code_as_file_async(code_text: str, caption: str): # Removed file_
         logger.exception("An error occurred while sending the code as a file.")
         await send_telegram_message_async(f"An internal error occurred while trying to send the code file: {e}")
     finally:
-        # Clean up the temporary file
         if temp_file_path and os.path.exists(temp_file_path):
             os.remove(temp_file_path)
 
@@ -201,38 +218,41 @@ def run_async_task(coro):
         return asyncio.run_coroutine_threadsafe(coro, loop)
     else:
         logger.critical("Asyncio event loop is not running. Cannot submit task.")
-        # Return a Future that's immediately done, possibly with an exception
         f = Future()
         f.set_exception(RuntimeError("Asyncio event loop not running"))
         return f
 
-# --- UPDATED TASK FUNCTIONS ---
+# --- OCR Helper Function ---
+def capture_and_ocr():
+    """Captures a screenshot and performs OCR, returning the recognized text."""
+    try:
+        with mss.mss() as sct:
+            monitor = sct.monitors[0]
+            sct_img = sct.grab(monitor)
+            pil_image = Image.frombytes("RGB", sct_img.size, sct_img.rgb)
 
-def process_ai_response(ai_raw_response: str):
+        ocr_text = pytesseract.image_to_string(pil_image)
+        return ocr_text.strip()
+    except Exception as e:
+        logger.exception("Error during screenshot or OCR.")
+        # Send a message to Telegram about the OCR error
+        run_async_task(send_telegram_message_async(f"An error occurred during screenshot or OCR: {e}"))
+        return None # Indicate failure
+
+# --- Hotkey Handler Functions ---
+
+def handle_code_response(ai_raw_response: str, hotkey_used: str, alternate_hotkey: str = None):
     """
-    Parses the structured AI response and dispatches the appropriate Telegram action.
+    Parses a CODE response from AI and sends it. Notifies if AI returned MCQ.
+    Modified for Python-only output
     """
     if ai_raw_response.startswith("ERROR:"):
         run_async_task(send_telegram_message_async(ai_raw_response))
         return
 
-    if ai_raw_response.startswith("TYPE:MCQ"):
-        try:
-            mcq_answer = ai_raw_response.split("ANSWER:", 1)[1].strip()
-            if mcq_answer:
-                logger.info(f"Detected MCQ. Sending answer: {mcq_answer}")
-                run_async_task(send_telegram_message_async(f"MCQ Answer: {mcq_answer}"))
-            else:
-                logger.warning("AI returned MCQ type but no answer option found.")
-                run_async_task(send_telegram_message_async("AI detected an MCQ but could not extract the answer. Please try again."))
-        except IndexError:
-            logger.error(f"Malformed MCQ response from AI: {ai_raw_response}")
-            run_async_task(send_telegram_message_async("AI returned a malformed MCQ answer. Please review the input."))
-    elif ai_raw_response.startswith("TYPE:CODE"):
+    if ai_raw_response.startswith("TYPE:CODE"):
         try:
             parts = ai_raw_response.split('\n')
-            
-            # Find LANGUAGE and CODE lines
             language = None
             code_start_index = -1
             for i, part in enumerate(parts):
@@ -244,71 +264,116 @@ def process_ai_response(ai_raw_response: str):
             if language is None or code_start_index == -1:
                 raise ValueError("Missing LANGUAGE or CODE section in AI response.")
 
-            # The actual code starts on the line *after* "CODE:"
             code_text = "\n".join(parts[code_start_index + 1:]).strip()
 
             if not code_text:
-                logger.info(f"AI returned no {language} code.")
+                logger.info(f"AI returned no {language} code for the request.")
                 run_async_task(send_telegram_message_async(f"The AI did not generate any {language} code for the given input."))
                 return
 
-            caption = f"{language} code generated from input (as .txt):" # Updated caption for clarity
+            if language != "Python":
+                logger.warning(f"AI returned {language} code but Python was strictly enforced.")
+                run_async_task(send_telegram_message_async(
+                    f"The AI generated *{language}* code, but this hotkey enforces *Python*. "
+                    "The AI should always return Python code.  Please review the input."
+                ))
+            
+            caption = f"{language} code generated from input (as .txt):"
             logger.info(f"Detected programming problem ({language}). Sending code as .txt file.")
-            run_async_task(send_code_as_file_async(code_text, caption)) # Removed file_extension argument
+            run_async_task(send_code_as_file_async(code_text, caption))
 
         except (IndexError, ValueError) as e:
-            logger.error(f"Malformed CODE response from AI: {ai_raw_response}. Error: {e}")
+            logger.error(f"Malformed CODE response from AI for code request: {ai_raw_response}. Error: {e}")
             run_async_task(send_telegram_message_async("AI returned a malformed code answer. Please review the input."))
+    elif ai_raw_response.startswith("TYPE:MCQ"):
+        logger.info(f"AI detected an MCQ but the code hotkey ({hotkey_used}) was pressed.")
+        msg = f"This hotkey ({format_hotkey_for_display(hotkey_used)}) is for code solutions only. The AI interpreted your input as an MCQ."
+        if alternate_hotkey:
+            msg += f" Please use the MCQ hotkey ({format_hotkey_for_display(alternate_hotkey)}) if you intended an MCQ."
+        run_async_task(send_telegram_message_async(msg))
     else:
-        logger.error(f"Unexpected AI response format: {ai_raw_response}")
-        run_async_task(send_telegram_message_async("AI returned an unexpected response format. Could not process the request."))
+        logger.error(f"Unexpected AI response format for code request: {ai_raw_response}")
+        run_async_task(send_telegram_message_async("AI returned an unexpected response format. Could not process the code request."))
 
-
-def perform_ocr_task():
+def handle_mcq_response(ai_raw_response: str, hotkey_used: str, alternate_hotkey: str = None):
     """
-    Captures a screenshot, performs OCR, gets a structured AI answer, and dispatches it.
+    Parses an MCQ response from AI and sends it. Notifies if AI returned CODE.
     """
-    logger.info("Hotkey %s pressed. Initiating OCR task from screenshot...", format_hotkey_for_display(OCR_HOTKEY))
-    try:
-        with mss.mss() as sct:
-            monitor = sct.monitors[0]
-            sct_img = sct.grab(monitor)
-            pil_image = Image.frombytes("RGB", sct_img.size, sct_img.rgb)
+    if ai_raw_response.startswith("ERROR:"):
+        run_async_task(send_telegram_message_async(ai_raw_response))
+        return
 
-        ocr_text = pytesseract.image_to_string(pil_image)
-        if not ocr_text.strip():
-            logger.info("No text recognized by OCR.")
-            run_async_task(send_telegram_message_async("No text was recognized from the screenshot."))
-            return
+    if ai_raw_response.startswith("TYPE:MCQ"):
+        try:
+            lines = ai_raw_response.split('\n')
+            mcq_answer = ""
+            explanation = ""
 
-        ai_raw_response = get_ai_answer(ocr_text)
-        process_ai_response(ai_raw_response)
+            for line in lines:
+                if line.startswith("ANSWER:"):
+                    mcq_answer = line.split("ANSWER:", 1)[1].strip()
+                elif line.startswith("EXPLANATION:"):
+                    explanation = line.split("EXPLANATION:", 1)[1].strip()
+            
+            if mcq_answer:
+                response_message = f"MCQ Answer: *{mcq_answer}*" # Bold the answer
+                if explanation:
+                    response_message += f"\n\n*Explanation:*\n{explanation}" # Newline and bold explanation
+                
+                logger.info(f"Detected MCQ. Sending: {response_message}")
+                run_async_task(send_telegram_message_async(response_message))
+            else:
+                logger.warning("AI returned MCQ type but no answer option found for MCQ request.")
+                run_async_task(send_telegram_message_async("AI detected an MCQ but could not extract the answer. Please try again."))
+        except Exception as e: # Catch a broader exception if parsing fails unexpectedly
+            logger.error(f"Malformed MCQ response from AI for MCQ request: {ai_raw_response}. Error: {e}")
+            run_async_task(send_telegram_message_async("AI returned a malformed MCQ answer. Please review the input."))
+    elif ai_raw_response.startswith("TYPE:CODE"):
+        logger.info(f"AI detected a programming problem but the MCQ hotkey ({hotkey_used}) was pressed.")
+        msg = f"This hotkey ({format_hotkey_for_display(hotkey_used)}) is for MCQ solutions only. The AI interpreted your input as a programming problem."
+        if alternate_hotkey:
+            msg += f" Please use the code hotkey ({format_hotkey_for_display(alternate_hotkey)}) if you intended an MCQ."
+        run_async_task(send_telegram_message_async(msg))
+    else:
+        logger.error(f"Unexpected AI response format for MCQ request: {ai_raw_response}")
+        run_async_task(send_telegram_message_async("AI returned an unexpected response format. Could not process the MCQ request."))
 
-    except Exception as e:
-        logger.exception("An error occurred in perform_ocr_task.")
-        run_async_task(send_telegram_message_async(f"An internal error occurred during OCR task: {e}"))
 
-def perform_selection_task():
-    """
-    Reads text from clipboard, gets a structured AI answer, and dispatches it.
-    """
-    logger.info("Hotkey %s pressed. Initiating selection task from clipboard...", format_hotkey_for_display(SELECTION_HOTKEY))
-    try:
-        selected_text = pyperclip.paste()
-        if not selected_text.strip():
-            logger.info("Clipboard is empty or contains no readable text.")
-            run_async_task(send_telegram_message_async("Clipboard is empty. Please copy some text first."))
-            return
+# --- Specific Hotkey Callbacks ---
 
-        ai_raw_response = get_ai_answer(selected_text)
-        process_ai_response(ai_raw_response)
+def perform_code_hotkey_action():
+    """Action for OCR_CODE_HOTKEY. Enforces Python only."""
+    ocr_text = capture_and_ocr()
+    if ocr_text is None: return
+    if not ocr_text: 
+        run_async_task(send_telegram_message_async("No text recognized from screenshot for CODE request."))
+        return
 
-    except pyperclip.PyperclipException as e:
-        logger.exception(f"Failed to access clipboard: {e}.")
-        run_async_task(send_telegram_message_async(f"Could not access clipboard: {e}"))
-    except Exception as e:
-        logger.exception("An error occurred in perform_selection_task.")
-        run_async_task(send_telegram_message_async(f"An internal error occurred during selection task: {e}"))
+    ai_raw_response = get_ai_answer(ocr_text) # This will always use Python
+    handle_code_response(ai_raw_response, OCR_CODE_HOTKEY, OCR_MCQ_HOTKEY)
+
+def perform_mcq_hotkey_action():
+    """Action for OCR_MCQ_HOTKEY."""
+    ocr_text = capture_and_ocr()
+    if ocr_text is None: return
+    if not ocr_text:
+        run_async_task(send_telegram_message_async("No text recognized from screenshot for MCQ request."))
+        return
+    
+    ai_raw_response = get_ai_answer(ocr_text, is_mcq=True) # Pass the is_mcq flag to use the special prompt.
+    handle_mcq_response(ai_raw_response, OCR_MCQ_HOTKEY, OCR_CODE_HOTKEY)
+
+def perform_python_code_hotkey_action():
+    """Action for OCR_PYTHON_CODE_HOTKEY (always requests Python)."""
+    ocr_text = capture_and_ocr()
+    if ocr_text is None: return
+    if not ocr_text:
+        run_async_task(send_telegram_message_async("No text recognized from screenshot for Python CODE request."))
+        return
+    
+    ai_raw_response = get_ai_answer(ocr_text) # will default to python, and the language is checked
+    handle_code_response(ai_raw_response, OCR_PYTHON_CODE_HOTKEY, OCR_MCQ_HOTKEY)
+
 
 def start_loop_in_thread(loop_obj):
     """Function to run the asyncio event loop in a separate thread."""
@@ -367,8 +432,9 @@ def main():
 
     # --- Setup and start the hotkey listener ---
     hotkeys_to_listen = {
-        OCR_HOTKEY: perform_ocr_task,
-        SELECTION_HOTKEY: perform_selection_task
+        OCR_CODE_HOTKEY: perform_code_hotkey_action,
+        OCR_MCQ_HOTKEY: perform_mcq_hotkey_action,
+        OCR_PYTHON_CODE_HOTKEY: perform_python_code_hotkey_action, # New hotkey added here
     }
 
     logger.info("Configured hotkeys for listener:")
@@ -386,7 +452,6 @@ def main():
         if loop and loop.is_running():
             logger.info("Stopping asyncio event loop...")
             loop.call_soon_threadsafe(loop.stop)
-            # Give the thread a moment to finish, but don't block indefinitely
             loop_thread.join(timeout=5)
             if loop_thread.is_alive():
                 logger.warning("Asyncio loop thread did not stop gracefully.")

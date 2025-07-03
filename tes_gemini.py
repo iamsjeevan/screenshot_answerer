@@ -2,24 +2,29 @@ import os
 import re
 import time
 import traceback
-from groq import Groq
+import google.generativeai as genai # changed import name
+from google.generativeai import types
 
 # --- MODEL CONFIGURATION ---
-# Use the exact model names you provided
+# Using the model name you provided and adding other common Gemini models
 MODELS_TO_TEST = [
-    # "deepseek-r1-distill-llama-70b",
-    "meta-llama/llama-4-maverick-17b-128e-instruct",
-    # "mistral-saba-24b",
-    # "qwen-qwq-32b",
-    "llama-3.3-70b-versatile", # Adding a known strong baseline model for comparison
-    # "llama-3.1-8b-instant"   # Adding a known fast model for comparison
+    "gemini-2.5-flash-preview-04-17", # Fast and efficient
+    "gemini-2.5-flash-lite-preview-06-17",   # More capable, higher cost
+    "gemini-2.5-flash",
+    "gemini-2.0-flash"
+                  # The model name you provided (ensure you have access to it)
 ]
 
-# --- GROQ CLIENT INITIALIZATION ---
+# --- GEMINI CLIENT INITIALIZATION ---
 try:
-    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+    # The configure method has been deprecated
+    # We will configure the API key directly on the genai module
+    genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+
+    # The client object is not typically initialized directly with `genai.Client`
+    # when using `genai.configure`. Instead, models are accessed via `genai.GenerativeModel`.
 except Exception as e:
-    print("Error initializing Groq client. Make sure your GROQ_API_KEY is set.")
+    print("Error configuring Gemini client. Make sure your GEMINI_API_KEY is set.")
     print(e)
     exit()
 
@@ -44,7 +49,7 @@ def extract_python_code(response_content):
     code_block_match = re.search(r"```python\n(.*?)\n```", response_content, re.DOTALL)
     if code_block_match:
         return code_block_match.group(1).strip()
-    # Fallback for models that might not use markdown
+    # Fallback for models that might not use markdown (less common for code-focused models)
     return response_content.strip()
 
 # --- BENCHMARKING QUESTIONS AND TEST CASES ---
@@ -172,17 +177,14 @@ def get_all_questions():
         ( ([1, 2, 3],), 6 ), # All at depth 1, max depth 1. 1*1 + 2*1 + 3*1 = 6
         ( ([[1], [1]],), 2 ),
         ( ([[[[[5]]]]],), 5 ),
-        ( ([6, [4, [2]]],), 20 ), # 6*3 + 4*2 + 2*1 = 18+8+2 = 28 -> Mistake in my manual calc. Let's re-verify. max_depth=3. 6:(d=1,w=3), 4:(d=2,w=2), 2:(d=3,w=1) => 6*3+4*2+2*1 = 18+8+2 = 28. Corrected.
-        ( ([2, [3, [4, 5]]],), 32 ) # max_depth=3. 2:(d=1,w=3), 3:(d=2,w=2), 4:(d=3,w=1), 5:(d=3,w=1) => 2*3 + 3*2 + 4*1 + 5*1 = 6+6+4+5=21. Corrected.
+        ( ([6, [4, [2]]],), 28 ), # max_depth=3. 6:(d=1,w=3), 4:(d=2,w=2), 2:(d=3,w=1) => 6*3+4*2+2*1 = 18+8+2 = 28.
+        ( ([2, [3, [4, 5]]],), 21 ) # max_depth=3. 2:(d=1,w=3), 3:(d=2,w=2), 4:(d=3,w=1), 5:(d=3,w=1) => 2*3 + 3*2 + 4*1 + 5*1 = 6+6+4+5=21.
     ]
-    # Correcting the test cases I manually botched. This is why automated tests are great!
-    q3_tests[8] = (( [6, [4, [2]]] ,), 28)
-    q3_tests[9] = (( [2, [3, [4, 5]]] ,), 21)
     q3 = TestQuestion("Q3: Nested List Weight Sum II", q3_desc, "depth_sum_inverse", ["nested_list"], q3_tests)
 
 
     # --- Question 4 ---
-    q4_desc = 'Implement a function that simulates a single move in a classic Snake game. The function takes the board dimensions (`width`, `height`), the current snake\'s body coordinates (a list of `[x, y]` pairs, with the head at index 0), the current food location `[x, y]`, and the next move ("U", "D", "L", "R"). The function should return the new state of the snake\'s body. The snake grows by one segment if it eats the food. The game ends if the snake hits a wall or itself. In case the game ends, return the string "Game Over".'
+    q4_desc = 'Implement a function that simulates a single move in a classic Snake game. The function takes the board dimensions (`width`, `height`), the current snake\'s body coordinates (a list of `[x, y]` pairs, with the head at index 0), the current food location `[x, y]`, and the next move ("U", "D", "L", "R"). The function should return the new state of the snake\'s body. The game ends if the snake hits a wall or itself. In case the game ends, return the string "Game Over".'
     q4_tests = [
         # ( (width, height, snake_body, food_loc, move), expected_output )
         ( (10, 10, [[2,2], [2,1]], [5,5], "U"), [[2,3], [2,2]] ), # Move up
@@ -226,21 +228,37 @@ if __name__ == "__main__":
     results = {model: {} for model in MODELS_TO_TEST}
     total_scores = {model: 0 for model in MODELS_TO_TEST}
 
-    print("Starting Groq Coding Benchmark...")
+    print("Starting Gemini Coding Benchmark...")
     print(f"Models to test: {', '.join(MODELS_TO_TEST)}\n")
 
     for model_name in MODELS_TO_TEST:
         print(f"--- Testing Model: {model_name} ---")
+        try:
+            # Initialize the model instance for the current model_name
+            # For `google-genai`, you typically get the model object this way
+            model_instance = genai.GenerativeModel(model_name)
+        except Exception as e:
+            print(f"  Could not load model {model_name}: {e}")
+            print("  Skipping this model.")
+            continue # Skip to the next model if it can't be loaded
+
         for q in questions:
             print(f"  > Running {q.name}...")
             start_time = time.time()
             try:
-                chat_completion = client.chat.completions.create(
-                    messages=[{"role": "user", "content": q.get_prompt()}],
-                    model=model_name,
-                    temperature=0.0 # Set to 0 for deterministic, best-effort output
+                # Construct the content for the Gemini API call
+                contents_parts = [q.get_prompt()]
+
+                # Generate content using the non-streaming method for full response
+                response = model_instance.generate_content(
+                    contents_parts,
+                    generation_config=types.GenerationConfig(
+                        temperature=0.0, # Setting temperature to 0 for more deterministic output
+                    ),
+                    # thinking_config = types.ThinkingConfig(thinking_budget=-1), # Optional, can be included if desired
                 )
-                response_content = chat_completion.choices[0].message.content
+
+                response_content = response.text # Get the text directly
                 generated_code = extract_python_code(response_content)
 
                 if not generated_code:
@@ -253,6 +271,8 @@ if __name__ == "__main__":
 
             except Exception as e:
                 score, message = 0, f"API call failed: {e}"
+                # For more detailed error if needed:
+                # print(f"  API Error for {q.name}: {e}\n{traceback.format_exc()}")
                 results[model_name][q.name] = 0
 
             end_time = time.time()

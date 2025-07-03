@@ -423,3 +423,383 @@ TypeError: _on_press() missing 1 required positional argument: 'injected'
 2025-06-24 17:45:06,980 - INFO - script.py:177 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpq2qo8rj_.txt
 2025-06-24 17:45:08,118 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
 2025-06-24 17:45:08,119 - INFO - script.py:188 - Telegram document sent successfully to Somnath (7774323731)!
+2025-06-24 17:46:02,113 - INFO - script.py:387 - Stopping asyncio event loop...
+2025-06-24 17:46:02,116 - INFO - script.py:393 - Application exited.
+2025-06-24 17:50:37,328 - INFO - script.py:324 - Starting application initialization.
+2025-06-24 17:50:42,846 - INFO - script.py:336 - Recipient for this session set to: Kushal (ID: 1931229819)
+2025-06-24 17:50:42,847 - INFO - script.py:350 - Asyncio event loop started in a separate thread.
+2025-06-24 17:50:43,022 - INFO - script.py:357 - Telegram Bot object initialized successfully.
+2025-06-24 17:50:43,022 - INFO - script.py:374 - Configured hotkeys for listener:
+2025-06-24 17:50:43,022 - INFO - script.py:376 -   - 'cmd shift 1' will trigger 'perform_ocr_task'
+2025-06-24 17:50:43,022 - INFO - script.py:376 -   - 'cmd shift 2' will trigger 'perform_selection_task'
+2025-06-24 17:50:43,142 - INFO - script.py:380 - AI Telegram Bot tool is running securely for Kushal.
+2025-06-24 17:50:43,143 - INFO - script.py:381 - Listener is active and waiting for hotkey presses.
+2025-06-24 17:51:36,086 - INFO - script.py:271 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-24 17:51:42,543 - INFO - script.py:223 - Detected MCQ. Sending answer: B
+2025-06-24 17:51:43,429 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 17:51:43,432 - INFO - script.py:151 - Telegram status message sent successfully to Kushal (1931229819)!
+2025-06-24 17:52:51,790 - INFO - script.py:387 - Stopping asyncio event loop...
+2025-06-24 17:52:51,791 - INFO - script.py:393 - Application exited.
+2025-06-24 17:52:55,810 - INFO - script.py:324 - Starting application initialization.
+2025-06-24 17:53:04,675 - INFO - script.py:336 - Recipient for this session set to: Jeevan (ID: 7107828513)
+2025-06-24 17:53:04,676 - INFO - script.py:350 - Asyncio event loop started in a separate thread.
+2025-06-24 17:53:04,855 - INFO - script.py:357 - Telegram Bot object initialized successfully.
+2025-06-24 17:53:04,855 - INFO - script.py:374 - Configured hotkeys for listener:
+2025-06-24 17:53:04,855 - INFO - script.py:376 -   - 'cmd shift 1' will trigger 'perform_ocr_task'
+2025-06-24 17:53:04,855 - INFO - script.py:376 -   - 'cmd shift 2' will trigger 'perform_selection_task'
+2025-06-24 17:53:04,973 - INFO - script.py:380 - AI Telegram Bot tool is running securely for Jeevan.
+2025-06-24 17:53:04,973 - INFO - script.py:381 - Listener is active and waiting for hotkey presses.
+2025-06-24 17:53:21,759 - INFO - script.py:271 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-24 17:53:46,688 - INFO - script.py:256 - Detected programming problem (C++). Sending code as .txt file.
+2025-06-24 17:53:46,694 - INFO - script.py:177 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmp2ihqgt72.txt
+2025-06-24 17:53:47,766 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-24 17:53:47,768 - INFO - script.py:188 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-24 17:58:31,379 - INFO - script.py:332 - Starting application initialization.
+2025-06-24 17:58:33,221 - INFO - script.py:344 - Recipient for this session set to: Jeevan (ID: 7107828513)
+2025-06-24 17:58:33,222 - INFO - script.py:358 - Asyncio event loop started in a separate thread.
+2025-06-24 17:58:33,404 - INFO - script.py:365 - Telegram Bot object initialized successfully.
+2025-06-24 17:58:33,404 - INFO - script.py:382 - Configured hotkeys for listener:
+2025-06-24 17:58:33,404 - INFO - script.py:384 -   - 'cmd shift 1' will trigger 'perform_ocr_task'
+2025-06-24 17:58:33,404 - INFO - script.py:384 -   - 'cmd shift 2' will trigger 'perform_selection_task'
+2025-06-24 17:58:33,523 - INFO - script.py:388 - AI Telegram Bot tool is running securely for Jeevan.
+2025-06-24 17:58:33,523 - INFO - script.py:389 - Listener is active and waiting for hotkey presses.
+2025-06-24 17:58:51,032 - INFO - script.py:279 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-24 17:58:58,919 - INFO - script.py:231 - Detected MCQ. Sending answer: A
+2025-06-24 17:58:59,835 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 17:58:59,838 - INFO - script.py:159 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 18:00:40,738 - INFO - script.py:395 - Stopping asyncio event loop...
+2025-06-24 18:00:40,740 - INFO - script.py:401 - Application exited.
+2025-06-24 18:00:43,959 - INFO - script.py:342 - Starting application initialization.
+2025-06-24 18:02:02,000 - INFO - script.py:342 - Starting application initialization.
+2025-06-24 18:03:08,296 - INFO - script.py:354 - Recipient for this session set to: Jeevan (ID: 7107828513)
+2025-06-24 18:03:08,304 - INFO - script.py:368 - Asyncio event loop started in a separate thread.
+2025-06-24 18:03:08,487 - INFO - script.py:375 - Telegram Bot object initialized successfully.
+2025-06-24 18:03:08,487 - INFO - script.py:392 - Configured hotkeys for listener:
+2025-06-24 18:03:08,487 - INFO - script.py:394 -   - 'cmd shift 1' will trigger 'perform_ocr_task'
+2025-06-24 18:03:08,487 - INFO - script.py:394 -   - 'cmd shift 2' will trigger 'perform_selection_task'
+2025-06-24 18:03:08,627 - INFO - script.py:398 - AI Telegram Bot tool is running securely for Jeevan.
+2025-06-24 18:03:08,627 - INFO - script.py:399 - Listener is active and waiting for hotkey presses.
+2025-06-24 18:03:26,697 - INFO - script.py:289 - Hotkey cmd shift 1 pressed. Initiating OCR task from screenshot...
+2025-06-24 18:03:39,985 - INFO - script.py:274 - Detected programming problem (C++). Sending code as .txt file.
+2025-06-24 18:03:39,989 - INFO - script.py:187 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmp4y4yr38k.txt
+2025-06-24 18:03:41,237 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-24 18:03:41,241 - INFO - script.py:197 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-24 18:08:49,145 - ERROR - __init__.py:234 - Unhandled exception in listener callback
+Traceback (most recent call last):
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/__init__.py", line 230, in inner
+    return f(self, *args, **kwargs)
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/darwin.py", line 290, in _handler
+    self._handle_message(proxy, event_type, event, refcon, is_injected)
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/keyboard/_darwin.py", line 313, in _handle_message
+    self.on_press(self._SPECIAL_KEYS[key])
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/__init__.py", line 146, in inner
+    if f(*args) is False:
+TypeError: _on_press() missing 1 required positional argument: 'injected'
+2025-06-24 18:08:49,177 - INFO - script.py:405 - Stopping asyncio event loop...
+2025-06-24 18:08:49,179 - INFO - script.py:410 - Application exited.
+2025-06-24 19:24:27,378 - INFO - script.py:360 - Starting application initialization.
+2025-06-24 19:24:31,664 - INFO - script.py:372 - Recipient for this session set to: Jeevan (ID: 7107828513)
+2025-06-24 19:24:31,665 - INFO - script.py:386 - Asyncio event loop started in a separate thread.
+2025-06-24 19:24:31,858 - INFO - script.py:393 - Telegram Bot object initialized successfully.
+2025-06-24 19:24:31,859 - INFO - script.py:410 - Configured hotkeys for listener:
+2025-06-24 19:24:31,859 - INFO - script.py:412 -   - 'cmd shift 1' will trigger 'handle_code_request'
+2025-06-24 19:24:31,859 - INFO - script.py:412 -   - 'cmd shift 2' will trigger 'handle_mcq_request'
+2025-06-24 19:24:31,993 - INFO - script.py:416 - AI Telegram Bot tool is running securely for Jeevan.
+2025-06-24 19:24:31,993 - INFO - script.py:417 - Listener is active and waiting for hotkey presses.
+2025-06-24 19:25:16,408 - INFO - script.py:299 - Hotkey cmd shift 2 pressed. Initiating OCR for MCQ task...
+2025-06-24 19:25:29,817 - INFO - script.py:331 - Detected MCQ. Sending: MCQ Answer: *A*
+
+*Explanation:*
+The code initializes an integer variable `ans` to 0 and a character array `ch` with the string "abcdefghij". It then iterates through the `ch` array from index 0 to 9. In each iteration, it calculates the difference between the ASCII value of the current character `ch[i]` and the ASCII value of 'a', and adds this difference to `ans`.
+2025-06-24 19:25:30,826 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:25:30,827 - INFO - script.py:162 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:25:50,114 - INFO - script.py:299 - Hotkey cmd shift 2 pressed. Initiating OCR for MCQ task...
+2025-06-24 19:25:58,133 - INFO - script.py:331 - Detected MCQ. Sending: MCQ Answer: *19 82*
+
+*Explanation:*
+The provided C code defines a structure `School` with two integer members: `age` and `rollNo`. The `solve()` function declares a variable `sc` of type `struct School`. It then assigns the value `19` to `sc.age` and `82` to `sc.rollNo`. Finally, `printf("%d %d", sc.age, sc.rollNo);` prints the value of `sc.age` followed by a space and then the value of `sc.rollNo`. The `main()` function simply calls `solve()`. Thus, the program will print "19 82".
+2025-06-24 19:25:59,098 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:25:59,101 - INFO - script.py:162 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:27:19,299 - INFO - script.py:240 - Hotkey cmd shift 1 pressed. Initiating OCR for CODE task...
+2025-06-24 19:27:46,588 - INFO - script.py:277 - Detected programming problem (C++). Sending code as .txt file.
+2025-06-24 19:27:46,595 - INFO - script.py:187 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmphy6a39ds.txt
+2025-06-24 19:27:47,906 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-24 19:27:47,909 - INFO - script.py:197 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-24 19:33:18,664 - INFO - script.py:299 - Hotkey cmd shift 2 pressed. Initiating OCR for MCQ task...
+2025-06-24 19:33:24,926 - INFO - script.py:331 - Detected MCQ. Sending: MCQ Answer: *deque*
+
+*Explanation:*
+Let's analyze each option provided:
+2025-06-24 19:33:26,056 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:33:26,057 - INFO - script.py:162 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:33:49,566 - INFO - script.py:240 - Hotkey cmd shift 1 pressed. Initiating OCR for CODE task...
+2025-06-24 19:33:58,072 - INFO - script.py:277 - Detected programming problem (C++). Sending code as .txt file.
+2025-06-24 19:33:58,083 - INFO - script.py:187 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpd9lgowtr.txt
+2025-06-24 19:33:59,301 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-24 19:33:59,305 - INFO - script.py:197 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-24 19:36:30,187 - INFO - script.py:423 - Stopping asyncio event loop...
+2025-06-24 19:36:30,194 - INFO - script.py:428 - Application exited.
+2025-06-24 19:36:34,415 - INFO - script.py:399 - Starting application initialization.
+2025-06-24 19:37:05,601 - INFO - script.py:411 - Recipient for this session set to: Jeevan (ID: 7107828513)
+2025-06-24 19:37:05,608 - INFO - script.py:425 - Asyncio event loop started in a separate thread.
+2025-06-24 19:37:05,796 - INFO - script.py:432 - Telegram Bot object initialized successfully.
+2025-06-24 19:37:05,796 - INFO - script.py:450 - Configured hotkeys for listener:
+2025-06-24 19:37:05,796 - INFO - script.py:452 -   - 'cmd shift 1' will trigger 'perform_code_hotkey_action'
+2025-06-24 19:37:05,796 - INFO - script.py:452 -   - 'cmd shift 2' will trigger 'perform_mcq_hotkey_action'
+2025-06-24 19:37:05,797 - INFO - script.py:452 -   - 'cmd shift 3' will trigger 'perform_python_code_hotkey_action'
+2025-06-24 19:37:05,953 - INFO - script.py:456 - AI Telegram Bot tool is running securely for Jeevan.
+2025-06-24 19:37:05,953 - INFO - script.py:457 - Listener is active and waiting for hotkey presses.
+2025-06-24 19:37:19,250 - INFO - script.py:281 - Detected programming problem (Python). Sending code as .txt file.
+2025-06-24 19:37:19,257 - INFO - script.py:191 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpfhyn3cae.txt
+2025-06-24 19:37:20,401 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-24 19:37:20,402 - INFO - script.py:201 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-24 19:41:09,267 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *D*
+
+*Explanation:*
+Let's analyze the calculations made by Student A and Student B.
+2025-06-24 19:41:10,222 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:41:10,225 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:41:47,874 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *O Set higher local preference for NYR1 routes*
+
+*Explanation:*
+The BGP path selection process evaluates attributes in a specific order to determine the best path. Key attributes and their typical evaluation order (higher priority first) include:
+2025-06-24 19:41:48,874 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:41:48,881 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:42:12,583 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *A*
+
+*Explanation:*
+This is a classic probability puzzle known as the Monty Hall Problem.
+2025-06-24 19:42:13,536 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:42:13,539 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:43:23,415 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *B*
+
+*Explanation:*
+Fine-tuning a model involves taking a model that has already been trained on a large, general dataset (a pre-trained model) and then continuing its training on a new, typically smaller, and more specific dataset. The goal is to adapt the pre-trained model's learned features and representations to a particular, often related, task or domain. This process leverages the extensive knowledge gained during initial pre-training while specializing the model for a new target.
+2025-06-24 19:43:24,331 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:43:24,333 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:43:53,419 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *C*
+2025-06-24 19:43:54,374 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:43:54,376 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:44:45,748 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *OQ The program will compile with warning, successfully execute, but it may print 0 or 1234*
+
+*Explanation:*
+The provided code contains several syntax errors (e.g., `ALL {`, `&i3`, `xj`, `printf (p%dc, k)`, `FO`, `BQO`). However, given the nature of the question ("probable behaviour") and the multiple-choice options focusing on runtime outcomes, it's highly probable that these are transcription/OCR errors and the intent is to analyze the program's logical flow after correcting the obvious typos.
+2025-06-24 19:44:46,672 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:44:46,674 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:45:37,666 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *18*
+
+*Explanation:*
+The problem describes a sequence of letter pairs: AZ, BY, ... NM.
+2025-06-24 19:45:38,626 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:45:38,628 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:45:58,241 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *OQ Dog's method*
+
+*Explanation:*
+This scenario describes runtime polymorphism (also known as dynamic method dispatch or late binding). When a base class reference (or pointer, in C++) points to a derived class object, and a method is called that is overridden in the derived class, the version of the method defined in the *actual object's type* (the derived class, in this case, `Dog`) is executed. This assumes the method in the base class (`Animal`) is declared as virtual (in C++) or is by default polymorphic (as in Java or C# where methods are virtual by default). This mechanism allows the specific behavior of the derived class to be invoked even when interacting through a base class interface.
+2025-06-24 19:45:59,229 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:45:59,232 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:46:29,260 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *9*
+
+*Explanation:*
+The problem presents a pattern where uppercase letters are mapped to either 0 or 1. We need to identify the rule governing this mapping and apply it to the letter 'B'.
+2025-06-24 19:46:30,238 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:46:30,240 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:46:54,152 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *O1*
+
+*Explanation:*
+The pattern assigns '1' to letters that contain a closed loop or "hole" in their standard uppercase typographical form, and '0' to letters that do not contain such a loop.
+2025-06-24 19:46:55,065 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:46:55,069 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:48:02,464 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *B*
+
+*Explanation:*
+The laptop's IP address is 169.254.45.7. This is an Automatic Private IP Addressing (APIPA) address, which a Windows client assigns to itself when it is configured to obtain an IP address automatically (via DHCP) but fails to locate a DHCP server or receive a response. The DORA (Discover, Offer, Request, Acknowledge) process is the sequence of steps a DHCP client uses to obtain an IP address. If the laptop has an APIPA address, it signifies that the DORA process did not successfully complete, leading to the self-assigned IP and no default gateway. The fact that other devices on the same subnet are receiving IPs in the 192.168.1.0/24 range indicates that a DHCP server is present and functional for the subnet, ruling out the DHCP server being generally unreachable or its pool being entirely full. Therefore, the issue is specific to this laptop's inability to successfully complete the DORA process.
+2025-06-24 19:48:03,459 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:48:03,463 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:50:06,311 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *12*
+2025-06-24 19:50:07,264 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:50:07,266 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:51:25,120 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *13*
+
+*Explanation:*
+The problem asks for the total number of bytes written to memory during the execution of the loop `for (i = 0; i < 256; i++) A[i] = A[i] + B[2*i];` with a write-through cache policy.
+2025-06-24 19:51:26,122 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:51:26,125 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:52:33,731 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *13*
+
+*Explanation:*
+The problem asks for the total number of bytes written to main memory during the execution of the loop, given a "write-through" cache policy.
+2025-06-24 19:52:34,701 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:52:34,707 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:54:16,803 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *F*
+
+*Explanation:*
+Let the common ratio of the inheritance be 'x'.
+2025-06-24 19:54:17,806 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:54:17,808 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:55:21,927 - INFO - script.py:288 - AI detected an MCQ but the code hotkey (<cmd>+<shift>+1) was pressed.
+2025-06-24 19:55:22,919 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:55:22,922 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:55:57,306 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *A*
+
+*Explanation:*
+To determine the probability, we first list all possible outcomes when tossing three fair coins simultaneously. Each coin can land on Heads (H) or Tails (T).
+2025-06-24 19:55:58,257 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:55:58,260 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:57:15,739 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *D*
+
+*Explanation:*
+Let's analyze each statement:
+2025-06-24 19:57:16,745 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:57:16,747 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:57:37,454 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *Redistribution between EIGRP and BGP at border routers*
+
+*Explanation:*
+When different routing protocols operate in different parts of a network (e.g., an interior gateway protocol like EIGRP and an exterior gateway protocol like BGP), redistribution is the mechanism used to exchange routing information between them. Border routers, which connect these different routing domains, are where this redistribution is configured. This process ensures that routes learned by one protocol are injected into the other, thereby achieving end-to-end reachability across the protocol boundaries.
+2025-06-24 19:57:38,409 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:57:38,411 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:57:59,056 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *We are 95% certain that the true average height of students lies within this range*
+
+*Explanation:*
+A confidence interval provides a range of plausible values for an unknown population parameter, such as the population mean (average height in this case), based on sample data. The confidence level (e.g., 95%) indicates the long-run probability that such intervals constructed from repeated samples would contain the true population parameter. Therefore, for a single, calculated interval, the correct interpretation is that we are 95% confident (or certain) that the true population average height falls within the calculated interval (155.24, 164.77).
+2025-06-24 19:58:00,054 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:58:00,056 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:58:39,038 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *OQ switchport mode access*
+
+*Explanation:*
+The question asks to configure an *access port* for both data and voice traffic.
+2025-06-24 19:58:40,025 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:58:40,028 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 19:59:24,307 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *A*
+
+*Explanation:*
+The problem describes a min-heap initially in the state `[1, 3, 5, 8, 9, 7, 6, 10, 12, 11]`. When the minimum element (1) is removed from a min-heap, the last element (11 in this case) is moved to the root position. The heap then needs to be rebalanced using the "heapify down" (or sift-down) operation starting from the new root.
+2025-06-24 19:59:25,227 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 19:59:25,229 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 20:01:55,703 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *21*
+2025-06-24 20:01:56,630 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 20:01:56,632 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 20:04:54,474 - INFO - script.py:281 - Detected programming problem (C++). Sending code as .txt file.
+2025-06-24 20:04:54,484 - INFO - script.py:191 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmp_qega_3r.txt
+2025-06-24 20:04:55,873 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-24 20:04:55,876 - INFO - script.py:201 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-24 20:28:17,931 - INFO - script.py:281 - Detected programming problem (C++). Sending code as .txt file.
+2025-06-24 20:28:17,940 - INFO - script.py:191 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpxsjcvaj6.txt
+2025-06-24 20:28:19,282 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-24 20:28:19,284 - INFO - script.py:201 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-24 20:40:16,704 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *Wrong IP address subnet*
+2025-06-24 20:40:17,725 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 20:40:17,727 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 20:41:58,150 - INFO - script.py:335 - AI detected a programming problem but the MCQ hotkey (<cmd>+<shift>+2) was pressed.
+2025-06-24 20:41:59,137 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 20:41:59,140 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 20:42:43,897 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *Preemption*
+
+*Explanation:*
+The four necessary Coffman conditions for a deadlock to occur are:
+2025-06-24 20:42:44,920 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 20:42:44,922 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 20:43:00,293 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *D*
+
+*Explanation:*
+Let the length of the rectangle be L and the breadth be B.
+2025-06-24 20:43:01,371 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 20:43:01,372 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 20:43:18,892 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *B*
+
+*Explanation:*
+Let Qa be the quantity of Type A pulse and Qb be the quantity of Type B pulse.
+2025-06-24 20:43:19,837 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 20:43:19,847 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 20:43:36,983 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *C*
+
+*Explanation:*
+Inheritance is a fundamental concept in Object-Oriented Programming (OOP) that allows a class (subclass/derived class) to inherit properties and behaviors from another class (base class/parent class). The primary goal is code reusability and establishing an "is-a" relationship.
+2025-06-24 20:43:38,007 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 20:43:38,009 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 20:44:17,630 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *() 204*
+
+*Explanation:*
+The problem asks us to find the number of different ways to reach the 50th square starting from the 1st square, using at most 15 moves. Each move allows us to advance by 1, 2, 3, 4, or 5 squares. We need to find the last three digits of this total number of ways (M).
+2025-06-24 20:44:18,610 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 20:44:18,615 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 20:45:36,697 - INFO - script.py:326 - Detected MCQ. Sending: MCQ Answer: *C) 2 and 3 only*
+
+*Explanation:*
+The problem states that devices in VLAN 30 and VLAN 40 cannot communicate on a Layer 3 switch. Several assumptions are made:
+2025-06-24 20:45:37,690 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 20:45:37,695 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 20:47:44,494 - INFO - script.py:335 - AI detected a programming problem but the MCQ hotkey (<cmd>+<shift>+2) was pressed.
+2025-06-24 20:47:45,457 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendMessage "HTTP/1.1 200 OK"
+2025-06-24 20:47:45,461 - INFO - script.py:166 - Telegram status message sent successfully to Jeevan (7107828513)!
+2025-06-24 20:50:14,038 - INFO - script.py:281 - Detected programming problem (Python). Sending code as .txt file.
+2025-06-24 20:50:14,048 - INFO - script.py:191 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmp8vihoocv.txt
+2025-06-24 20:50:15,438 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-06-24 20:50:15,441 - INFO - script.py:201 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-06-24 22:12:15,744 - ERROR - __init__.py:234 - Unhandled exception in listener callback
+Traceback (most recent call last):
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/__init__.py", line 230, in inner
+    return f(self, *args, **kwargs)
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/darwin.py", line 290, in _handler
+    self._handle_message(proxy, event_type, event, refcon, is_injected)
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/keyboard/_darwin.py", line 313, in _handle_message
+    self.on_press(self._SPECIAL_KEYS[key])
+  File "/Users/jeevans/screenshot_answerer/venv/lib/python3.9/site-packages/pynput/_util/__init__.py", line 146, in inner
+    if f(*args) is False:
+TypeError: _on_press() missing 1 required positional argument: 'injected'
+2025-06-24 22:12:16,040 - INFO - script.py:463 - Stopping asyncio event loop...
+2025-06-24 22:12:16,049 - INFO - script.py:468 - Application exited.
+2025-07-03 21:36:08,576 - INFO - script.py:399 - Starting application initialization.
+2025-07-03 21:36:10,789 - INFO - script.py:411 - Recipient for this session set to: Jeevan (ID: 7107828513)
+2025-07-03 21:36:10,791 - INFO - script.py:425 - Asyncio event loop started in a separate thread.
+2025-07-03 21:36:10,977 - INFO - script.py:432 - Telegram Bot object initialized successfully.
+2025-07-03 21:36:10,977 - INFO - script.py:450 - Configured hotkeys for listener:
+2025-07-03 21:36:10,977 - INFO - script.py:452 -   - 'cmd shift 1' will trigger 'perform_code_hotkey_action'
+2025-07-03 21:36:10,977 - INFO - script.py:452 -   - 'cmd shift 2' will trigger 'perform_mcq_hotkey_action'
+2025-07-03 21:36:10,977 - INFO - script.py:452 -   - 'cmd shift 3' will trigger 'perform_python_code_hotkey_action'
+2025-07-03 21:36:11,133 - INFO - script.py:456 - AI Telegram Bot tool is running securely for Jeevan.
+2025-07-03 21:36:11,133 - INFO - script.py:457 - Listener is active and waiting for hotkey presses.
+2025-07-03 21:41:17,946 - INFO - script.py:151 - Using AI_MODEL: gemini-2.5-flash
+2025-07-03 21:42:03,933 - INFO - script.py:292 - Detected programming problem (Python). Sending code as .txt file.
+2025-07-03 21:42:03,942 - INFO - script.py:206 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmp8lyp3drn.txt
+2025-07-03 21:42:06,001 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-07-03 21:42:06,005 - INFO - script.py:216 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-07-03 21:44:01,785 - INFO - script.py:463 - Stopping asyncio event loop...
+2025-07-03 21:44:01,791 - INFO - script.py:468 - Application exited.
+2025-07-03 21:44:04,519 - INFO - script.py:402 - Starting application initialization.
+2025-07-03 21:44:35,962 - INFO - script.py:414 - Recipient for this session set to: Jeevan (ID: 7107828513)
+2025-07-03 21:44:35,970 - INFO - script.py:428 - Asyncio event loop started in a separate thread.
+2025-07-03 21:44:36,156 - INFO - script.py:435 - Telegram Bot object initialized successfully.
+2025-07-03 21:44:36,156 - INFO - script.py:453 - Configured hotkeys for listener:
+2025-07-03 21:44:36,157 - INFO - script.py:455 -   - 'cmd shift 1' will trigger 'perform_code_hotkey_action'
+2025-07-03 21:44:36,157 - INFO - script.py:455 -   - 'cmd shift 2' will trigger 'perform_mcq_hotkey_action'
+2025-07-03 21:44:36,157 - INFO - script.py:455 -   - 'cmd shift 3' will trigger 'perform_python_code_hotkey_action'
+2025-07-03 21:44:36,301 - INFO - script.py:459 - AI Telegram Bot tool is running securely for Jeevan.
+2025-07-03 21:44:36,301 - INFO - script.py:460 - Listener is active and waiting for hotkey presses.
+2025-07-03 21:44:40,692 - INFO - script.py:154 - Using AI_MODEL: gemini-2.5-flash
+2025-07-03 21:45:15,318 - INFO - script.py:295 - Detected programming problem (Python). Sending code as .txt file.
+2025-07-03 21:45:15,322 - INFO - script.py:209 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpp16egg9v.txt
+2025-07-03 21:45:16,757 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-07-03 21:45:16,760 - INFO - script.py:219 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-07-03 21:50:03,388 - INFO - script.py:466 - Stopping asyncio event loop...
+2025-07-03 21:50:03,391 - INFO - script.py:471 - Application exited.
+2025-07-03 21:50:08,005 - INFO - script.py:389 - Starting application initialization.
+2025-07-03 21:50:09,329 - INFO - script.py:401 - Recipient for this session set to: Jeevan (ID: 7107828513)
+2025-07-03 21:50:09,331 - INFO - script.py:415 - Asyncio event loop started in a separate thread.
+2025-07-03 21:50:09,509 - INFO - script.py:422 - Telegram Bot object initialized successfully.
+2025-07-03 21:50:09,509 - INFO - script.py:440 - Configured hotkeys for listener:
+2025-07-03 21:50:09,509 - INFO - script.py:442 -   - 'cmd shift 1' will trigger 'perform_code_hotkey_action'
+2025-07-03 21:50:09,509 - INFO - script.py:442 -   - 'cmd shift 2' will trigger 'perform_mcq_hotkey_action'
+2025-07-03 21:50:09,509 - INFO - script.py:442 -   - 'cmd shift 3' will trigger 'perform_python_code_hotkey_action'
+2025-07-03 21:50:09,623 - INFO - script.py:446 - AI Telegram Bot tool is running securely for Jeevan.
+2025-07-03 21:50:09,623 - INFO - script.py:447 - Listener is active and waiting for hotkey presses.
+2025-07-03 21:50:35,195 - INFO - script.py:141 - Using AI_MODEL: gemini-2.5-flash
+2025-07-03 21:50:56,353 - INFO - script.py:282 - Detected programming problem (Python). Sending code as .txt file.
+2025-07-03 21:50:56,358 - INFO - script.py:196 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmppcnx1pli.txt
+2025-07-03 21:50:57,603 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-07-03 21:50:57,605 - INFO - script.py:206 - Telegram document sent successfully to Jeevan (7107828513)!
+2025-07-03 21:51:50,474 - INFO - script.py:141 - Using AI_MODEL: gemini-2.5-flash
+2025-07-03 21:52:15,392 - INFO - script.py:282 - Detected programming problem (Python). Sending code as .txt file.
+2025-07-03 21:52:15,397 - INFO - script.py:196 - Sending code as a file: /var/folders/5q/75x6_sk16k15qyg9tkkt0k_80000gn/T/tmpl5ou_j72.txt
+2025-07-03 21:52:16,637 - INFO - _client.py:1740 - HTTP Request: POST https://api.telegram.org/bot7201167359:AAFCZAeeVCviDkvyyjs7sLu-uKrNxlvgCqU/sendDocument "HTTP/1.1 200 OK"
+2025-07-03 21:52:16,673 - INFO - script.py:206 - Telegram document sent successfully to Jeevan (7107828513)!
