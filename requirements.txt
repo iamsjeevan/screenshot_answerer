@@ -3,13 +3,13 @@ pynput
 mss
 Pillow
 pytesseract
-
 # API Libraries
 google-generativeai
-twilio
-
 # Environment Variable Library
 python-dotenv
 pyperclip
-# .env file
+python-telegram-bot
+keyboard
+pyscreenshot
+
 
