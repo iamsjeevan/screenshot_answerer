@@ -1,281 +1,250 @@
-import os
-import re
+import sys
+import threading
+import pyscreenshot as ImageGrab
+import keyboard
 import time
-import traceback
-from groq import Groq
+import os
+import json
+import re  # <-- ADDED THIS IMPORT
+import google.generativeai as genai
+from dotenv import load_dotenv
+import telegram
+import asyncio
+from concurrent.futures import Future
+import logging
+from logging.handlers import RotatingFileHandler
+import tempfile
+import string
+import pyperclip
 
-# --- MODEL CONFIGURATION ---
-# Use the exact model names you provided
-MODELS_TO_TEST = [
-    # "deepseek-r1-distill-llama-70b",
-    "meta-llama/llama-4-maverick-17b-128e-instruct",
-    # "mistral-saba-24b",
-    # "qwen-qwq-32b",
-    "llama-3.3-70b-versatile", # Adding a known strong baseline model for comparison
-    # "llama-3.1-8b-instant"   # Adding a known fast model for comparison
-]
+load_dotenv()
 
-# --- GROQ CLIENT INITIALIZATION ---
-try:
-    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
-except Exception as e:
-    print("Error initializing Groq client. Make sure your GROQ_API_KEY is set.")
-    print(e)
-    exit()
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 
-# --- PROMPT ENGINEERING ---
-# This prompt is designed to force the model to only output code
-def get_coding_prompt(question_description, function_name, args):
-    return f"""You are an expert Python programmer. Your task is to solve the following programming problem.
-Your response MUST be a single, complete Python code block.
-You MUST NOT include any text, explanation, or comments outside of the code block.
-The function must be named `{function_name}` and take the arguments `{', '.join(args)}`.
-Do not include any example usage or `if __name__ == "__main__":` block.
+NEETCODE_PROMPT_VISION = (
+    "You are an expert programmer solving a problem from the NeetCode 150 list, shown in the attached image. "
+    "Analyze the image and provide a clean, efficient Python solution. "
+    "Your response *MUST* strictly follow this format, with no other text or explanations:\n"
+    "TYPE:CODE\n"
+    "LANGUAGE:Python\n"
+    "CODE:\n"
+    "<code>"
+)
 
-Problem Description:
----
-{question_description}
----
-"""
+MCQ_PROMPT_VISION = (
+    "You are an expert MCQ solver. The multiple-choice question is in the attached image. "
+    "Analyze the image and provide the single best answer. "
+    "Your response *MUST* strictly follow this format, with no other text or explanations:\n"
+    "TYPE:MCQ\n"
+    "ANSWER:<Option Letter>\n"
+    "EXPLANATION:<A very brief, one-sentence explanation.>"
+)
 
-# --- CODE EXTRACTION ---
-def extract_python_code(response_content):
-    """Extracts Python code from a markdown-formatted string."""
-    code_block_match = re.search(r"```python\n(.*?)\n```", response_content, re.DOTALL)
-    if code_block_match:
-        return code_block_match.group(1).strip()
-    # Fallback for models that might not use markdown
-    return response_content.strip()
+USER_CHAT_IDS = {
+    "1": {"name": "Jeevan", "id": "7107828513"},
+    "2": {"name": "Kushal", "id": "1931229819"},
+    "3": {"name": "Shahbhaaz", "id": "5963030030"},
+    "4": {"name": "Somnath", "id": "7774323731"}
+}
+SELECTED_CHAT_ID = None
+SELECTED_USER_NAME = None
 
-# --- BENCHMARKING QUESTIONS AND TEST CASES ---
+MOD_KEY = "command" if sys.platform == "darwin" else "ctrl"
+OCR_CODE_HOTKEY = f'{MOD_KEY}+shift+1'
+OCR_MCQ_HOTKEY = f'{MOD_KEY}+shift+2'
 
-class TestQuestion:
-    def __init__(self, name, description, function_name, args, test_cases):
-        self.name = name
-        self.description = description
-        self.function_name = function_name
-        self.args = args
-        self.test_cases = test_cases
+AI_MODEL = "gemini-1.5-flash"
 
-    def get_prompt(self):
-        return get_coding_prompt(self.description, self.function_name, self.args)
+LOG_FILE = 'application.log'
+MAX_LOG_BYTES = 5 * 1024 * 1024
+BACKUP_COUNT = 3
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s')
+stream_handler = logging.StreamHandler(sys.stdout)
+stream_handler.setFormatter(formatter)
+logger.addHandler(stream_handler)
+file_handler = RotatingFileHandler(LOG_FILE, maxBytes=MAX_LOG_BYTES, backupCount=BACKUP_COUNT)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+def handle_exception(exc_type, exc_value, exc_traceback):
+    if issubclass(exc_type, KeyboardInterrupt): sys.__excepthook__(exc_type, exc_value, exc_traceback)
+    else: logger.critical("Unhandled exception:", exc_info=(exc_type, exc_value, exc_traceback))
+sys.excepthook = handle_exception
+loop = None
+telegram_bot = None
+loop_thread = None
+def format_hotkey_for_display(hotkey_str: str) -> str: return hotkey_str.replace('+', ' ').upper()
+def escape_markdown_v2(text: str) -> str:
+    special_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
+    text = text.replace('\\', '\\\\')
+    for char in special_chars: text = text.replace(char, f'\\{char}')
+    return text
+async def send_telegram_message_async(message_text: str):
+    if not telegram_bot or not SELECTED_CHAT_ID: return
+    escaped_message = escape_markdown_v2(message_text)
+    try:
+        await telegram_bot.send_message(chat_id=int(SELECTED_CHAT_ID), text=escaped_message, parse_mode=telegram.constants.ParseMode.MARKDOWN_V2)
+    except Exception as e: logger.exception(f"Failed to send Telegram message: {e}")
+async def send_code_as_file_async(code_text: str, caption: str):
+    if not telegram_bot or not SELECTED_CHAT_ID: return
+    if not code_text or not code_text.strip():
+        await send_telegram_message_async("The AI did not generate any code.")
+        return
+    escaped_caption = escape_markdown_v2(caption)
+    temp_file_path = None
+    try:
+        with tempfile.NamedTemporaryFile(mode='w+', delete=False, suffix='.py', encoding='utf-8') as temp_file:
+            temp_file.write(code_text)
+            temp_file_path = temp_file.name
+        with open(temp_file_path, 'rb') as file_to_send:
+            await telegram_bot.send_document(chat_id=int(SELECTED_CHAT_ID), document=file_to_send, filename="solution.py", caption=escaped_caption, parse_mode=telegram.constants.ParseMode.MARKDOWN_V2)
+    except Exception as e:
+        logger.exception("Error sending code as file.")
+        await send_telegram_message_async(f"An internal error occurred: {e}")
+    finally:
+        if temp_file_path and os.path.exists(temp_file_path): os.remove(temp_file_path)
+def run_async_task(coro):
+    if loop and loop.is_running(): return asyncio.run_coroutine_threadsafe(coro, loop)
+    f = Future()
+    f.set_exception(RuntimeError("Asyncio event loop not running"))
+    return f
 
-    def run_tests(self, generated_code):
-        passed_count = 0
+def get_ai_response_from_image(prompt_text: str) -> str:
+    print("   -> Capturing screen...")
+    screenshot = ImageGrab.grab()
+    print("   -> Screenshot captured. Sending to AI...")
+    
+    model = genai.GenerativeModel(AI_MODEL)
+    response = model.generate_content([prompt_text, screenshot])
+    
+    print("   -> AI response received.")
+    return response.text.strip()
+
+def handle_code_response(ai_raw_response: str):
+    """
+    Parses a TYPE:CODE response, cleans it with regex, copies to clipboard, 
+    and sends to Telegram.
+    """
+    if ai_raw_response.startswith("TYPE:CODE"):
         try:
-            # Execute the generated code to define the function
-            exec_globals = {}
-            exec(generated_code, exec_globals)
-            solution_func = exec_globals.get(self.function_name)
+            code_text = ai_raw_response.split("CODE:", 1)[1].strip()
 
-            if not solution_func:
-                # The model did not generate the function with the correct name
-                return 0, f"Function '{self.function_name}' not found."
+            # --- UPDATED: Use a regular expression to extract code ---
+            # This pattern looks for a ``` block and extracts the content inside.
+            # re.DOTALL makes '.' match newlines, which is crucial for multiline code.
+            match = re.search(r'```(?:python|py)?\s*\n?(.*)```', code_text, re.DOTALL)
+            if match:
+                # If a markdown block is found, use the content inside it.
+                code_text = match.group(1).strip()
+            # If no markdown block is found, the original code_text is used.
+            # This makes the script robust.
+            # -----------------------------------------------------------
 
-            for i, (inputs, expected_output) in enumerate(self.test_cases):
-                try:
-                    # The inputs tuple needs to be unpacked for the function call
-                    actual_output = solution_func(*inputs)
-                    if actual_output == expected_output:
-                        passed_count += 1
-                    # Special handling for Question 5 which has two functions
-                    elif self.name == "Q5: Serialize/Deserialize Tree":
-                         # This case is special, we need to serialize then deserialize
-                         deserializer = exec_globals.get("deserialize")
-                         if deserializer:
-                             serialized_data = solution_func(inputs[0])
-                             reconstructed_tree = deserializer(serialized_data)
-                             # A simple check for structural equality
-                             if serialize_tree_for_check(reconstructed_tree) == serialize_tree_for_check(inputs[0]):
-                                 passed_count += 1
-                except Exception as e:
-                    # A single test case failure shouldn't stop the whole run
-                    # print(f"      Test case {i+1} failed with error: {e}")
-                    pass # Just count it as a fail
-
-            return passed_count, f"Passed {passed_count}/{len(self.test_cases)}"
-
+            if not code_text:
+                run_async_task(send_telegram_message_async("The AI did not generate any code."))
+                return
+            
+            pyperclip.copy(code_text)
+            print("   -> Solution copied to clipboard!")
+            caption = "NeetCode solution generated (and copied to your clipboard):"
+            run_async_task(send_code_as_file_async(code_text, caption))
         except Exception as e:
-            return 0, f"Code execution failed: {traceback.format_exc()}"
+            print(f"   -> ERROR: Failed to process AI response: {e}")
+            run_async_task(send_telegram_message_async(f"AI returned a malformed code answer."))
+    else:
+        run_async_task(send_telegram_message_async(f"The AI did not return a valid code block."))
 
 
-# --- Helper classes/functions for test cases ---
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
+def handle_mcq_response(ai_raw_response: str):
+    if ai_raw_response.startswith("TYPE:MCQ"):
+        try:
+            lines = ai_raw_response.strip().split('\n')
+            answer_line = next((line for line in lines if line.startswith("ANSWER:")), None)
+            explanation_line = next((line for line in lines if line.startswith("EXPLANATION:")), None)
+            
+            mcq_answer = answer_line.split(":", 1)[1].strip() if answer_line else "Not found"
+            explanation = explanation_line.split(":", 1)[1].strip() if explanation_line else "No explanation provided."
 
-def serialize_tree_for_check(root):
-    # A consistent way to check tree equality for the test harness
-    if not root:
-        return "[]"
-    res = []
-    q = [root]
-    while q:
-        node = q.pop(0)
-        if node:
-            res.append(str(node.val))
-            q.append(node.left)
-            q.append(node.right)
-        else:
-            res.append("null")
-    # Trim trailing nulls
-    while res and res[-1] == "null":
-        res.pop()
-    return f"[{','.join(res)}]"
+            response_message = f"MCQ Answer: *{mcq_answer}*\n\n*Explanation:*\n{explanation}"
+            run_async_task(send_telegram_message_async(response_message))
+        except Exception as e:
+            print(f"   -> ERROR: Failed to process AI response: {e}")
+            run_async_task(send_telegram_message_async(f"AI returned a malformed MCQ answer."))
+    else:
+        run_async_task(send_telegram_message_async(f"The AI did not return a valid MCQ answer."))
 
+def perform_code_hotkey_action():
+    print("\n" + "-"*30)
+    print("✅ Hotkey for 'Code Solver' detected!")
+    try:
+        ai_response = get_ai_response_from_image(NEETCODE_PROMPT_VISION)
+        handle_code_response(ai_response)
+        print("✅ Workflow complete!")
+        print("-"*30 + "\n")
+    except Exception as e:
+        print(f"❌ An error occurred: {e}")
+        run_async_task(send_telegram_message_async(f"A critical error occurred: {e}"))
 
-# --- DEFINE ALL QUESTIONS AND THEIR TEST CASES ---
-def get_all_questions():
-    # --- Question 1 ---
-    q1_desc = "Given a 2D grid where each cell has a cost to enter, and a separate list of 'toll booth' cells `(row, col)` that incur an additional fixed toll cost, find the minimum cost path from the top-left corner `(0, 0)` to the bottom-right corner `(rows-1, cols-1)`. You can only move right or down."
-    q1_tests = [
-        # ( (grid, tolls, toll_cost), expected_output )
-        ( ([[1, 3, 1], [1, 5, 1], [4, 2, 1]], [], 10), 7), # Simple case, no tolls
-        ( ([[1, 3, 1], [1, 5, 1], [4, 2, 1]], [(1, 1)], 10), 17), # One toll on the optimal path
-        ( ([[1, 1, 1], [10, 10, 1], [1, 10, 1]], [(0, 1)], 5), 10), # Toll forces a detour
-        ( ([[1]], [], 100), 1), # Single cell grid
-        ( ([[1, 1, 1, 1]], [], 10), 4), # Single row grid
-        ( ([[1], [1], [1], [1]], [], 10), 4), # Single column grid
-        ( ([[1, 100], [1, 1]], [(0, 0)], 5), 8), # Toll at the start
-        ( ([[1, 1], [100, 1]], [(1, 1)], 5), 8), # Toll at the end
-        ( ([[1, 2, 3], [4, 5, 6], [7, 8, 9]], [(0, 1), (1, 1), (2, 1)], 10), 31), # Multiple tolls
-        ( ([[10, 1], [1, 10]], [], 10), 12) # Simple choice
-    ]
-    q1 = TestQuestion("Q1: Grid Path with Tolls", q1_desc, "min_path_cost", ["grid", "tolls", "toll_cost"], q1_tests)
+def perform_mcq_hotkey_action():
+    print("\n" + "-"*30)
+    print("✅ Hotkey for 'MCQ Solver' detected!")
+    try:
+        ai_response = get_ai_response_from_image(MCQ_PROMPT_VISION)
+        handle_mcq_response(ai_response)
+        print("✅ Workflow complete!")
+        print("-"*30 + "\n")
+    except Exception as e:
+        print(f"❌ An error occurred: {e}")
+        run_async_task(send_telegram_message_async(f"A critical error occurred: {e}"))
 
-    # --- Question 2 ---
-    q2_desc = "Given a string `s`, find the length of the longest palindromic subsequence in it. A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements."
-    q2_tests = [
-        ( ("bbbab",), 4 ), # "bbbb"
-        ( ("cbbd",), 2 ), # "bb"
-        ( ("a",), 1 ),
-        ( ("",), 0 ),
-        ( ("agbdba",), 5 ), # "abdba"
-        ( ("abcdefg",), 1 ),
-        ( ("aaaaa",), 5 ),
-        ( ("abacaba",), 7 ),
-        ( ("character",), 5 ), # "carac"
-        ( ("topcoderopen",), 3) # "opo"
-    ]
-    q2 = TestQuestion("Q2: Longest Palindromic Subsequence", q2_desc, "longest_palindrome_subseq", ["s"], q2_tests)
+def main():
+    global loop, telegram_bot, loop_thread, SELECTED_CHAT_ID, SELECTED_USER_NAME
+    logger.info("Starting application.")
+    if sys.platform.startswith('linux') and os.geteuid() != 0:
+        print("\nFATAL: Please run this script with 'sudo'. Example: sudo python3 script.py")
+        return
 
-    # --- Question 3 ---
-    q3_desc = "Given a nested list of integers, return the sum of all integers in the list weighted by their depth, but with the weighting reversed. The leaf-level integers have a weight of 1, and the root-level integers have the highest weight. For example, in `[[1,1],2,[1,1]]`, the `1`s are at depth 2 and the `2` is at depth 1. The max depth is 2. So, the `2` gets weight `(2-1+1)=2` and the `1`s get weight `(2-2+1)=1`. The result is `(1*1 + 1*1 + 1*1 + 1*1) + (2*2) = 8`."
-    q3_tests = [
-        ( ([[1,1],2,[1,1]],), 8 ),
-        ( ([1,[4,[6]]],), 17 ), # 1*(3-1+1) + 4*(3-2+1) + 6*(3-3+1) = 3 + 8 + 6 = 17
-        ( ([1],), 1 ),
-        ( ([],), 0 ),
-        ( ([[[1]]],), 1 ),
-        ( ([1, 2, 3],), 6 ), # All at depth 1, max depth 1. 1*1 + 2*1 + 3*1 = 6
-        ( ([[1], [1]],), 2 ),
-        ( ([[[[[5]]]]],), 5 ),
-        ( ([6, [4, [2]]],), 20 ), # 6*3 + 4*2 + 2*1 = 18+8+2 = 28 -> Mistake in my manual calc. Let's re-verify. max_depth=3. 6:(d=1,w=3), 4:(d=2,w=2), 2:(d=3,w=1) => 6*3+4*2+2*1 = 18+8+2 = 28. Corrected.
-        ( ([2, [3, [4, 5]]],), 32 ) # max_depth=3. 2:(d=1,w=3), 3:(d=2,w=2), 4:(d=3,w=1), 5:(d=3,w=1) => 2*3 + 3*2 + 4*1 + 5*1 = 6+6+4+5=21. Corrected.
-    ]
-    # Correcting the test cases I manually botched. This is why automated tests are great!
-    q3_tests[8] = (( [6, [4, [2]]] ,), 28)
-    q3_tests[9] = (( [2, [3, [4, 5]]] ,), 21)
-    q3 = TestQuestion("Q3: Nested List Weight Sum II", q3_desc, "depth_sum_inverse", ["nested_list"], q3_tests)
+    while True:
+        print("\n--- Who is the recipient for this session? ---")
+        for key, user_info in USER_CHAT_IDS.items():
+            print(f"  {key}) {user_info['name']}")
+        choice = input("Enter the number of the recipient: ")
+        if choice in USER_CHAT_IDS:
+            SELECTED_CHAT_ID, SELECTED_USER_NAME = USER_CHAT_IDS[choice]['id'], USER_CHAT_IDS[choice]['name']
+            break
+        else: print("Invalid choice.")
+            
+    if not all([TELEGRAM_BOT_TOKEN, GEMINI_API_KEY]):
+        logger.critical("Missing API keys in your .env file.")
+        return
 
+    loop = asyncio.new_event_loop()
+    threading.Thread(target=loop.run_forever, daemon=True).start()
+    logger.info("Asyncio event loop started.")
+    time.sleep(0.1)
+    
+    try:
+        telegram_bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+        genai.configure(api_key=GEMINI_API_KEY)
+        keyboard.add_hotkey(OCR_CODE_HOTKEY, perform_code_hotkey_action)
+        keyboard.add_hotkey(OCR_MCQ_HOTKEY, perform_mcq_hotkey_action)
+        
+        print("\n" + "="*50)
+        print("✅ AI Telegram Bot is running.")
+        print(f"   Hotkeys are active for {SELECTED_USER_NAME}.")
+        print(f"   - {format_hotkey_for_display(OCR_CODE_HOTKEY)} -> Code Solver")
+        print(f"   - {format_hotkey_for_display(OCR_MCQ_HOTKEY)} -> MCQ Solver")
+        print("   Press Ctrl+C in this terminal to stop.")
+        print("="*50 + "\n")
+        
+        keyboard.wait()
+    except Exception as e:
+        logger.critical("An error occurred during main setup.", exc_info=True)
+    finally:
+        if loop and loop.is_running(): loop.call_soon_threadsafe(loop.stop)
+        logger.info("Application exited.")
 
-    # --- Question 4 ---
-    q4_desc = 'Implement a function that simulates a single move in a classic Snake game. The function takes the board dimensions (`width`, `height`), the current snake\'s body coordinates (a list of `[x, y]` pairs, with the head at index 0), the current food location `[x, y]`, and the next move ("U", "D", "L", "R"). The function should return the new state of the snake\'s body. The snake grows by one segment if it eats the food. The game ends if the snake hits a wall or itself. In case the game ends, return the string "Game Over".'
-    q4_tests = [
-        # ( (width, height, snake_body, food_loc, move), expected_output )
-        ( (10, 10, [[2,2], [2,1]], [5,5], "U"), [[2,3], [2,2]] ), # Move up
-        ( (10, 10, [[2,2], [2,1]], [3,2], "R"), [[3,2], [2,2], [2,1]] ), # Move right and eat food
-        ( (5, 5, [[4,2], [3,2]], [0,0], "R"), "Game Over" ), # Hit right wall
-        ( (5, 5, [[0,2], [1,2]], [3,3], "L"), "Game Over" ), # Hit left wall
-        ( (5, 5, [[2,4], [2,3]], [3,3], "U"), "Game Over" ), # Hit top wall
-        ( (5, 5, [[2,0], [2,1]], [3,3], "D"), "Game Over" ), # Hit bottom wall
-        ( (5, 5, [[2,2], [2,1], [3,1], [3,2]], [4,4], "L"), "Game Over" ), # Self collision
-        ( (3, 3, [[0,0]], [1,0], "R"), [[1,0],[0,0]] ), # 1-segment snake eats food
-        ( (20, 20, [[10,10]], [5,5], "D"), [[10,9]] ), # 1-segment snake moves down
-        ( (5, 5, [[2,2], [2,1], [1,1]], [2,3], "U"), [[2,3], [2,2], [2,1], [1,1]] ) # Move up and eat food
-    ]
-    q4 = TestQuestion("Q4: Snake Game Simulator", q4_desc, "simulate_snake_move", ["width", "height", "snake_body", "food_loc", "move"], q4_tests)
-
-    # --- Question 5 ---
-    # For this one, the test harness is special. It checks serialize(deserialize(data)) == data
-    q5_desc = "Design an algorithm to serialize a binary tree to a single string and deserialize the string back to the original tree structure. You must implement two functions: `serialize(root)` and `deserialize(data)`. The test harness will verify that `deserialize(serialize(root))` results in an identical tree. Handle `None` nodes."
-    # ( (root_node,), expected_output_is_same_tree )
-    # The expected output is the same as the input tree, the harness handles the check.
-    t1 = TreeNode(1, TreeNode(2), TreeNode(3, TreeNode(4), TreeNode(5)))
-    t2 = None
-    t3 = TreeNode(1)
-    t4 = TreeNode(1, TreeNode(2))
-    t5 = TreeNode(1, None, TreeNode(2))
-    t6 = TreeNode(5, TreeNode(4, TreeNode(11, TreeNode(7), TreeNode(2))), TreeNode(8, TreeNode(13), TreeNode(4, None, TreeNode(1))))
-    t7 = TreeNode(-1, TreeNode(0), TreeNode(1))
-    t8 = TreeNode(2, TreeNode(1), TreeNode(3))
-    t9 = TreeNode(1, TreeNode(2, TreeNode(3, TreeNode(4))))
-    t10 = TreeNode(1,None,TreeNode(2,None,TreeNode(3,None,TreeNode(4))))
-
-    # We use serialize_tree_for_check to get a comparable value
-    q5_tests = [((t,) , serialize_tree_for_check(t)) for t in [t1,t2,t3,t4,t5,t6,t7,t8,t9,t10]]
-    q5 = TestQuestion("Q5: Serialize/Deserialize Tree", q5_desc, "serialize", ["root"], q5_tests)
-
-    return [q1, q2, q3, q4, q5]
-
-# --- MAIN EXECUTION ---
 if __name__ == "__main__":
-    questions = get_all_questions()
-    results = {model: {} for model in MODELS_TO_TEST}
-    total_scores = {model: 0 for model in MODELS_TO_TEST}
-
-    print("Starting Groq Coding Benchmark...")
-    print(f"Models to test: {', '.join(MODELS_TO_TEST)}\n")
-
-    for model_name in MODELS_TO_TEST:
-        print(f"--- Testing Model: {model_name} ---")
-        for q in questions:
-            print(f"  > Running {q.name}...")
-            start_time = time.time()
-            try:
-                chat_completion = client.chat.completions.create(
-                    messages=[{"role": "user", "content": q.get_prompt()}],
-                    model=model_name,
-                    temperature=0.0 # Set to 0 for deterministic, best-effort output
-                )
-                response_content = chat_completion.choices[0].message.content
-                generated_code = extract_python_code(response_content)
-
-                if not generated_code:
-                    score, message = 0, "No code was generated."
-                else:
-                    score, message = q.run_tests(generated_code)
-
-                total_scores[model_name] += score
-                results[model_name][q.name] = score
-
-            except Exception as e:
-                score, message = 0, f"API call failed: {e}"
-                results[model_name][q.name] = 0
-
-            end_time = time.time()
-            print(f"    Result: {message} ({end_time - start_time:.2f}s)")
-
-    print("\n\n--- Benchmark Complete ---")
-    print("--- Final Leaderboard ---\n")
-
-    # Prepare header
-    header = f"| {'Model':<45} |"
-    for q in questions:
-        header += f" {q.name.split(':')[0]:<4} |"
-    header += " Total Score |"
-    print(header)
-    print(f"|{'-'*47}|{'-'*6}|{'-'*6}|{'-'*6}|{'-'*6}|{'-'*6}|{'-'*13}|")
-
-    # Sort models by total score
-    sorted_models = sorted(total_scores.items(), key=lambda item: item[1], reverse=True)
-
-    for model_name, total_score in sorted_models:
-        row = f"| {model_name:<45} |"
-        for q in questions:
-            score = results[model_name].get(q.name, 0)
-            row += f" {score:>2}/10 |"
-        row += f" {total_score:>11} |"
-        print(row)
+    main()
